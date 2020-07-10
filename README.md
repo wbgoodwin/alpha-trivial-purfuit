@@ -12,5 +12,5 @@ If you are running Mac OS and get an error during npm install that says somethin
 links to resvolve the issue https://medium.com/flawless-app-stories/gyp-no-xcode-or-clt-version-detected-macos-catalina-anansewaa-38b536389e8d or
 https://anansewaa.com/gyp-no-xcode-or-clt-version-detected-macos-catalina/
 
--The app should be running on http://localhost:3000 in your browser.
--Use any text editor/IDE for editing the code. I use [VScode](https://code.visualstudio.com) and like it
+- The app should be running on http://localhost:3000 in your browser.
+- Use any text editor/IDE for editing the code. I use [VScode](https://code.visualstudio.com) and like it
