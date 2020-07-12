@@ -1,0 +1,168 @@
+/* DataStorageController.js
+
+   This module is used as an interfact to the database.
+   All database reads or updates should be done through this module.
+  
+   Trivial Purfuit
+   Team Alpha
+*/
+
+// Default DB parameters
+const host = 'localhost';
+const user = 'root';
+const password = 'root';
+const database = 'trivial_purfuit_database'
+
+// Establish a connection to the database
+const mySQL = require('mysql')
+const con = mySQL.createConnection({
+	'host': host,
+	'user': user,
+	'password': password,
+	'database': database
+})
+con.connect(function(err){
+	if (err) throw err
+	con.query('CREATE DATABASE IF NOT EXISTS ' + database, function(err, result){
+		if (err) throw err
+	})
+})
+
+// Import database from file
+const Importer = require('mysql-import');
+const importer = new Importer({host, user, password, database});
+function sqldumpImporter(){
+	importer.import('./' + database + '.sql').then(()=>{
+		console.log('SQL file imported.');
+	}).catch(err=>{
+		console.error(err);
+	});
+}
+
+// Export database to file
+var db_file_writer = require('mysqldump');
+function sqldumpexporter(){
+	db_file_writer({
+		connection: {
+			host: host,
+			user: user,
+			password: password,
+			database: database,
+		},
+		dumpToFile: './' + database + '.sql',
+	});
+}
+
+function getCategories(){
+	con.query("SELECT * FROM categories", function (err, result, fields){
+		if(err)
+		{
+			con.query("DROP TABLE IF EXISTS questions", function (err, result){
+				if (err) throw err;
+			});
+			con.query("DROP TABLE IF EXISTS categories", function (err, result){
+				if (err) throw err;
+			});
+			
+			// Empty or bad database
+			sqldumpImporter();
+			
+			con.query("SELECT * FROM categories", function (err, result, fields){
+				if (err) throw err;
+				categoryList = result;
+			});
+		}
+		else
+		{
+			categoryList = result;
+		}
+	});
+}
+
+function getQuestions(){
+	con.query("SELECT * FROM questions", function (err, result, fields){
+		if(err)
+		{
+			con.query("DROP TABLE IF EXISTS questions", function (err, result){
+				if (err) throw err;
+			});
+			con.query("DROP TABLE IF EXISTS categories", function (err, result){
+				if (err) throw err;
+			});
+			
+			// Empty or bad database
+			sqldumpImporter();
+			
+			con.query("SELECT * FROM questions", function (err, result, fields){
+				if (err) throw err;
+				questionList = result;
+			});
+		}
+		else
+		{
+			questionList = result;
+		}
+	});
+}
+
+var questionList;
+getQuestions();
+var categoryList;
+getCategories();
+
+// Exports
+
+module.exports.readAQuestion = function(){
+	return questionList[Math.random() * questionList.length];
+}
+
+module.exports.updateCategoryName = function(categoryID, newCategoryName){
+	con.query("UPDATE categories SET name = '" + newCategoryName + "' WHERE id = " + categoryID + ";", function (err, result){
+		if (err) throw err;
+		sqldumpexporter();
+		getCategories();
+	});
+}
+
+module.exports.updateCategoryColor = function(categoryID, newCategoryColor){
+	con.query("UPDATE categories SET color = '" + newCategoryColor + "' WHERE id = " + categoryID + ";", function (err, result){
+		if (err) throw err;
+		sqldumpexporter();
+		getQuestions();
+	});
+}
+
+module.exports.addNewQuestion = function(categoryID, question, correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3){
+	con.query("INSERT INTO questions(`question`, `correct_answer`,`incorrect_answer1`, `incorrect_answer2`, `incorrect_answer3`, `category_id`)" +
+		"VALUES('" + question + "', '" + correctAnswer + "', '" + incorrectAnswer1 + "', '" + incorrectAnswer2 + "', '" + incorrectAnswer3 + "', " + categoryID + ");",
+		function(err, result){
+		if (err) throw err;
+		sqldumpexporter();
+	});
+}
+
+module.exports.deleteQuestion = function(questionID){
+	con.query("DELETE FROM questions WHERE id = " + questionID + ";",function(err,result){
+		if(err) throw err;
+		sqldumpexporter();
+	});
+}
+
+module.exports.exportCategoryList = function(){
+	return categoryList;
+}
+
+module.exports.exportQuestionList = function(){
+	return questionList;
+}
+
+module.exports.importQuestionList = function(newQuestionList){
+	questionList = newQuestionList;
+	con.query("DROP TABLE questions;",function(err,result){
+		if(err) throw err;
+	});
+	for(var i = 0; i < newQuestionList.length; i++) {
+		addNewQuestion(newQuestionList.category_id, newQuestionList.question, newQuestionList.correct_answer,
+			newQuestionList.incorrect_answer1, newQuestionList.incorrect_answer2, newQuestionList.incorrect_answer3);
+    }
+}
