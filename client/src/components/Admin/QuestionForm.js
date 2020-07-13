@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {
-  Card, CardContent, CardHeader, Grid, Button, TextField
+  CardContent, CardHeader, Grid, Button, TextField, Paper
 } from '@material-ui/core'
 
 class QuestionForm extends React.Component {
@@ -108,9 +108,9 @@ class QuestionForm extends React.Component {
     } = this.state
 
     return (
-      <Grid item xs={11}>
-        <Card variant="outlined">
-          <CardHeader title={this.props.newQuestion ? "New Question" : "Edit Question"} />
+      <Grid item xs={11} style={{'marginBottom': '10px'}}>
+        <Paper>
+          <CardHeader title={this.props.newQuestion ? "Add Question" : "Edit Question"} />
           <CardContent>
             <Grid direction="column" container>
               <Grid item>
@@ -183,7 +183,7 @@ class QuestionForm extends React.Component {
               Save
             </Button>
           </CardContent>
-        </ Card>
+        </ Paper>
       </Grid>
     )
   }
