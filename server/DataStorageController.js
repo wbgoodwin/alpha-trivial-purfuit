@@ -2,16 +2,17 @@
 
    This module is used as an interfact to the database.
    All database reads or updates should be done through this module.
-  
+
    Trivial Purfuit
    Team Alpha
 */
 
 // Default DB parameters
-const host = 'localhost';
-const user = 'root';
-const password = 'root';
-const database = 'trivial_purfuit_database'
+require('dotenv-safe').config();
+const host = process.env.DB_HOST;
+const user = process.env.DB_USER;
+const password = process.env.DB_PASSWORD;
+const database = process.env.DB_DATABASE;
 
 // Establish a connection to the database
 const mySQL = require('mysql')
@@ -63,10 +64,10 @@ function getCategories(){
 			con.query("DROP TABLE IF EXISTS categories", function (err, result){
 				if (err) throw err;
 			});
-			
+
 			// Empty or bad database
 			sqldumpImporter();
-			
+
 			con.query("SELECT * FROM categories", function (err, result, fields){
 				if (err) throw err;
 				categoryList = result;
@@ -89,10 +90,10 @@ function getQuestions(){
 			con.query("DROP TABLE IF EXISTS categories", function (err, result){
 				if (err) throw err;
 			});
-			
+
 			// Empty or bad database
 			sqldumpImporter();
-			
+
 			con.query("SELECT * FROM questions", function (err, result, fields){
 				if (err) throw err;
 				questionList = result;
