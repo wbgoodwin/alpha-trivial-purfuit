@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `questions` (
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`),
   CONSTRAINT `category_id_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: categories
@@ -65,6 +65,106 @@ VALUES
     'Incorrect answer 1',
     'Incorrect answer 2',
     'Incorrect answer 3',
+    1
+  );
+INSERT INTO
+  `questions` (
+    `id`,
+    `question`,
+    `correct_answer`,
+    `incorrect_answer1`,
+    `incorrect_answer2`,
+    `incorrect_answer3`,
+    `category_id`
+  )
+VALUES
+  (
+    2,
+    'Test Question 2',
+    'Correct Answer',
+    'Incorrect Answer 1',
+    'Incorrect Answer 2',
+    'Incorrect Answer 3',
+    1
+  );
+INSERT INTO
+  `questions` (
+    `id`,
+    `question`,
+    `correct_answer`,
+    `incorrect_answer1`,
+    `incorrect_answer2`,
+    `incorrect_answer3`,
+    `category_id`
+  )
+VALUES
+  (
+    3,
+    'Test Question 2',
+    'Correct Answer',
+    'Incorrect Answer 1',
+    'Incorrect Answer 2',
+    'Incorrect Answer 3',
+    1
+  );
+INSERT INTO
+  `questions` (
+    `id`,
+    `question`,
+    `correct_answer`,
+    `incorrect_answer1`,
+    `incorrect_answer2`,
+    `incorrect_answer3`,
+    `category_id`
+  )
+VALUES
+  (
+    4,
+    'Test Question 3',
+    'Correct Answer',
+    'Incorrect Answer 1',
+    'Incorrect Answer 2',
+    'Incorrect Answer 3',
+    1
+  );
+INSERT INTO
+  `questions` (
+    `id`,
+    `question`,
+    `correct_answer`,
+    `incorrect_answer1`,
+    `incorrect_answer2`,
+    `incorrect_answer3`,
+    `category_id`
+  )
+VALUES
+  (
+    5,
+    'Test Question 4',
+    'Correct Answer',
+    'Incorrect Answer 1',
+    'Incorrect Answer 2',
+    'Incorrect Answer 3',
+    1
+  );
+INSERT INTO
+  `questions` (
+    `id`,
+    `question`,
+    `correct_answer`,
+    `incorrect_answer1`,
+    `incorrect_answer2`,
+    `incorrect_answer3`,
+    `category_id`
+  )
+VALUES
+  (
+    6,
+    'Test Question 5',
+    'Correct Answer',
+    'Incorrect Answer 1',
+    'Incorrect Answer 2',
+    'Incorrect Answer 3',
     1
   );
 

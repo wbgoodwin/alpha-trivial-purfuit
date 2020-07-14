@@ -1,8 +1,6 @@
 import * as React from 'react'
 import { Paper, Grid, Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
-import './Home.css'
-
 
 const Home = () => {
   const linkStyle = {
@@ -11,7 +9,16 @@ const Home = () => {
   }
 
   return (
-    <Grid container justify="center" alignItems="center" className="home" style={{'height': '100vh'}}>
+    <Grid
+      container
+      justify="center"
+      alignItems="center"
+      className="home"
+      style={{
+        'height': '100vh',
+        'backgroundColor': '#3f50b5'
+      }}
+    >
       <Paper style={{
           'width': '60%'
         }}

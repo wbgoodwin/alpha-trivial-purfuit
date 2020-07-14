@@ -31,7 +31,7 @@ const Admin = () => {
           'marginLeft': '10px',
         }}
       >
-        <Link style={{'cursor': 'pointer'}}>
+        <Link style={{'cursor': 'pointer'}} component="span">
           <RRDLink to="/" style={{'textDecoration': 'none', 'color': 'inherit'}}>
             Home
           </RRDLink>
@@ -64,10 +64,10 @@ const Admin = () => {
             <Grid item xs={4}>
               <Button variant="contained" size="large" fullWidth>
                 <RRDLink
-                  to={`${url}/new`}
+                  to={`${url}/questions`}
                   style={linkStyle}
                 >
-                  Add a Question
+                  Manage Questions
                 </RRDLink>
               </Button>
             </Grid>
@@ -75,21 +75,10 @@ const Admin = () => {
             <Grid item xs={4}>
               <Button variant="contained" size="large" fullWidth>
                 <RRDLink
-                  to={`${url}/edit`}
+                  to={`${url}/categories`}
                   style={linkStyle}
                 >
-                  Edit a Question
-                </RRDLink>
-              </Button>
-            </Grid>
-
-            <Grid item xs={4}>
-              <Button variant="contained" size="large" fullWidth>
-                <RRDLink
-                  to={`${url}/delete`}
-                  style={linkStyle}
-                >
-                  Delete a Question
+                  Manage Categories
                 </RRDLink>
               </Button>
             </Grid>
@@ -111,12 +100,6 @@ const Admin = () => {
       </Grid>
     </React.Fragment>
   )
-
-  // return (
-  //   <Grid container justify="center">
-  //     <QuestionForm newQuestion={true} />
-  //   </Grid>
-  // )
 }
 
 export default Admin

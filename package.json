@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "concurrently \"cd server && node server.js\" \"cd client && npm start\"",
+    "dev": "concurrently \"cd server && nodemon server.js\" \"cd client && npm start\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,5 +21,8 @@
   "homepage": "https://github.com/wbgoodwin/alpha-trivial-purfuit#readme",
   "dependencies": {
     "concurrently": "^5.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
   }
 }

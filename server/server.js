@@ -1,13 +1,36 @@
 const express = require('express')
-var cors = require('cors')
+const cors = require('cors')
+const bodyParser = require('body-parser')
 
 const app = express()
 app.use(cors())
+app.use(bodyParser.json())
 
 const API_PORT = 3001
+const DataStorageController = require('./DataStorageController')
+
 
 app.get('/', function (req, res) {
   res.send('Hello World')
+})
+
+app.get('/questions', function(req, res) {
+  const data = DataStorageController.exportQuestionList()
+  res.json(data)
+})
+
+app.get('/categories', function(req, res) {
+  const data = DataStorageController.exportCategoryList()
+  res.json(data)
+})
+
+app.post('/newQuestion', function(req, res) {
+  DataStorageController.addNewQuestion(
+    req.body.categoryID, req.body.question, req.body.correctAnswer,
+    req.body.incorrectAnswer1, req.body.incorrectAnswer2,
+    req.body.incorrectAnswer3
+  )
+  res.json({success: true})
 })
 
 app.listen(API_PORT)

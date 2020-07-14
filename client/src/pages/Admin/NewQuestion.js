@@ -16,20 +16,26 @@ const NewQuestion = () => {
           'marginLeft': '10px',
         }}
       >
-        <Link style={{'cursor': 'pointer'}}>
+        <Link style={{'cursor': 'pointer'}} component="span">
           <RRDLink to="/" style={{'textDecoration': 'none', 'color': 'inherit'}}>
             Home
           </RRDLink>
         </Link>
         <ArrowForwardIosIcon style={{'fontSize': '14', 'marginTop': '5px'}} />
-        <Link style={{'cursor': 'pointer'}}>
+        <Link style={{'cursor': 'pointer'}} component="span">
           <RRDLink to="/admin" style={{'textDecoration': 'none', 'color': 'inherit'}}>
             Administration Module
           </RRDLink>
         </Link>
         <ArrowForwardIosIcon style={{'fontSize': '14', 'marginTop': '5px'}} />
+        <Link style={{'cursor': 'pointer'}} component="span">
+          <RRDLink to="/admin/questions" style={{'textDecoration': 'none', 'color': 'inherit'}}>
+            Manage Questions
+          </RRDLink>
+        </Link>
+        <ArrowForwardIosIcon style={{'fontSize': '14', 'marginTop': '5px'}} />
         <Typography>
-          Add a New Question
+          Add a Question
         </Typography>
       </Grid>
       <Grid

@@ -134,12 +134,15 @@ module.exports.updateCategoryColor = function(categoryID, newCategoryColor){
 }
 
 module.exports.addNewQuestion = function(categoryID, question, correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3){
-	con.query("INSERT INTO questions(`question`, `correct_answer`,`incorrect_answer1`, `incorrect_answer2`, `incorrect_answer3`, `category_id`)" +
-		"VALUES('" + question + "', '" + correctAnswer + "', '" + incorrectAnswer1 + "', '" + incorrectAnswer2 + "', '" + incorrectAnswer3 + "', " + categoryID + ");",
-		function(err, result){
-		if (err) throw err;
-		sqldumpexporter();
-	});
+	con.beginTransaction(function(err) {
+		con.query("INSERT INTO questions(`question`, `correct_answer`,`incorrect_answer1`, `incorrect_answer2`, `incorrect_answer3`, `category_id`)" +
+			"VALUES('" + question + "', '" + correctAnswer + "', '" + incorrectAnswer1 + "', '" + incorrectAnswer2 + "', '" + incorrectAnswer3 + "', " + categoryID + ");",
+			function(err, result){
+			if (err) throw err;
+			sqldumpexporter();
+		});
+		con.commit();
+	})
 }
 
 module.exports.deleteQuestion = function(questionID){

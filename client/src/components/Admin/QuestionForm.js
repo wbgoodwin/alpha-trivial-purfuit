@@ -1,45 +1,64 @@
 import * as React from 'react'
 import {
-  CardContent, CardHeader, Grid, Button, TextField, Paper
+  CardContent, CardHeader, Grid, Button, TextField, Paper, Select, MenuItem,
+  InputLabel, FormControl
 } from '@material-ui/core'
+import { Redirect } from 'react-router-dom'
 
 class QuestionForm extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
+      categories: [],
       allEntered: false,
       questionText: "",
+      category: "",
       correctAnswer: "",
       incorrectAnswer1: "",
       incorrectAnswer2: "",
-      incorrectAnswer3: ""
+      incorrectAnswer3: "",
+      redirect: false
     }
 
     this.textChange = this.textChange.bind(this)
     this.getAllEntered = this.getAllEntered.bind(this)
     this.submit = this.submit.bind(this)
+    this.mapCategories = this.mapCategories.bind(this)
+    this.categoryChange = this.categoryChange.bind(this)
   }
 
-  componentDidLoad() {
-    if (!this.props.newQuestion) {
-      this.setState({
-        questionText: this.props.questionText,
-        correctAnswer: this.props.correctAnswer,
-        incorrectAnswer1: this.props.incorrectAnswer1,
-        incorrectAnswer2: this.props.incorrectAnswer2,
-        incorrectAnswer3: this.props.incorrectAnswer3,
-        allEntered: true
+  componentDidMount() {
+    fetch(`${process.env.REACT_APP_SERVER_HOST}/categories`)
+      .then(response => response.json())
+      .then(data => {
+        if (!this.props.newQuestion) {
+          this.setState({
+            categories: data,
+            questionText: this.props.questionText,
+            correctAnswer: this.props.correctAnswer,
+            incorrectAnswer1: this.props.incorrectAnswer1,
+            incorrectAnswer2: this.props.incorrectAnswer2,
+            incorrectAnswer3: this.props.incorrectAnswer3,
+            allEntered: true
+          })
+        }
+        else {
+          this.setState({
+            categories: data
+          })
+        }
       })
-    }
   }
 
   componentDidUpdate(prevProps, prevState) {
+    console.log(this.state)
     if (this.state.questionText !== prevState.questionText ||
       this.state.correctAnswer !== prevState.correctAnswer ||
       this.state.incorrectAnswer1 !== prevState.incorrectAnswer1 ||
       this.state.incorrectAnswer2 !== prevState.incorrectAnswer2 ||
-      this.state.incorrectAnswer3 !== prevState.incorrectAnswer3
+      this.state.incorrectAnswer3 !== prevState.incorrectAnswer3 ||
+      this.state.category !== prevState.category
     ) {
       this.setState({
         allEntered: this.getAllEntered()
@@ -90,22 +109,65 @@ class QuestionForm extends React.Component {
   getAllEntered() {
     const {
       questionText, correctAnswer, incorrectAnswer1, incorrectAnswer2,
-      incorrectAnswer3
+      incorrectAnswer3, category
     } = this.state
 
     return questionText && correctAnswer && incorrectAnswer1 &&
-           incorrectAnswer2 && incorrectAnswer3
+           incorrectAnswer2 && incorrectAnswer3 && category
   }
 
   submit() {
-    console.log("here")
+    const {
+      questionText, correctAnswer, incorrectAnswer1, incorrectAnswer2,
+      incorrectAnswer3, category
+    } = this.state
+
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          categoryID: category,
+          question: questionText,
+          correctAnswer: correctAnswer,
+          incorrectAnswer1: incorrectAnswer1,
+          incorrectAnswer2: incorrectAnswer2,
+          incorrectAnswer3: incorrectAnswer3
+        })
+    }
+
+    fetch(`${process.env.REACT_APP_SERVER_HOST}/newQuestion`, requestOptions)
+      .then(response =>
+        this.setState({
+          redirect: true
+        })
+      )
+  }
+
+  mapCategories(category, index) {
+    return (
+      <MenuItem key={index} value={category.id}>
+        {category.name}
+      </MenuItem>
+    )
+  }
+
+  categoryChange(e) {
+    var target = e.target.value
+
+    this.setState({
+      category: target
+    })
   }
 
   render() {
     const {
       allEntered, questionText, correctAnswer, incorrectAnswer1,
-      incorrectAnswer2, incorrectAnswer3
+      incorrectAnswer2, incorrectAnswer3, categories, category, redirect
     } = this.state
+
+    if (redirect) {
+      return <Redirect to="/admin/questions" />
+    }
 
     return (
       <Grid item xs={11} style={{'marginBottom': '10px'}}>
@@ -113,6 +175,22 @@ class QuestionForm extends React.Component {
           <CardHeader title={this.props.newQuestion ? "Add Question" : "Edit Question"} />
           <CardContent>
             <Grid direction="column" container>
+              <Grid item fullWidth>
+                <FormControl>
+                  <InputLabel htmlFor="category-select">Category</InputLabel>
+                  <Select
+                    id="category-select"
+                    name="category"
+                    value={category}
+                    label="Category"
+                    onChange={this.categoryChange}
+                    style={{'minWidth': '20vw'}}
+                  >
+                    {categories.map(this.mapCategories)}
+                  </Select>
+                </FormControl>
+              </Grid>
+
               <Grid item>
                 <TextField id="question-text"
                   margin="normal"
