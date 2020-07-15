@@ -19,22 +19,13 @@ https://anansewaa.com/gyp-no-xcode-or-clt-version-detected-macos-catalina/
 The following is how I (Will) set up my mysql db
 - I used Docker. If you do not have docker installed you can install it [here](https://www.docker.com/get-started)
 - I also used mysql workbench. Download can be found [here](https://www.mysql.com/products/workbench/)
-- Create a docker-compose.yml file with the following contents:
+- Run the following command:
 ```
-version: '3'
-
-services:
-
-  mysql-development:
-    image: mysql:8.0.17
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: trivial_purfuit_database
-    ports:
-      - "3306:3306"
+docker run --name alphadb -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -d mysql:latest
 ```
-- Navigate to the directory of the docker-compose.yml file in a terminal.
-- Run the command `docker-compose up` (make sure the docker app is running or this command won't work)
+This creates a db in a container named alphadb that is published to port 3306.
+- To start the db container run `docker start alphadb`. To stop run `docker stop alphadb`. Same with restart. To remove the container run `docker rm alphadb`.
+
 - Go to mysql workbench and connect to the db instance
 -  Only needed if you are running version >=8 I think. The npm package we are using in our app is using an older way to validate passwords than the current mysql is. Run `ALTER USER 'root' IDENTIFIED WITH mysql_native_password BY 'root'; flush privileges;` in mysql workbench query executor for the trivial_purfuit_database. Check out [this](https://stackoverflow.com/questions/50093144/mysql-8-0-client-does-not-support-authentication-protocol-requested-by-server) to understand why.
 - Use the alpha-trivial-purfuit/server/trivial_purfuit_database.sql file to import the database. This can be done from workbench by specifying the db before the rest of the script is run `USE trivial_purfuit_database`. It should also be imported automatically within the app
