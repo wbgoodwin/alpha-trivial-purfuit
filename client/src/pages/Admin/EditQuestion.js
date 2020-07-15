@@ -4,6 +4,7 @@ import { Grid, Link, Typography } from '@material-ui/core'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import Nav from '../../components/Nav'
 import { Link as RRDLink } from 'react-router-dom'
+import { getQuestion } from '../../controllers/AdminModuleController'
 
 class EditQuestion extends React.Component {
   constructor(props) {
@@ -19,19 +20,16 @@ class EditQuestion extends React.Component {
     }
   }
 
-  componentDidMount() {
-    fetch(`${process.env.REACT_APP_SERVER_HOST}/question/${this.props.match.params.id}`)
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          questionText: data.question,
-          category: data.category_id,
-          correctAnswer: data.correct_answer,
-          incorrectAnswer1: data.incorrect_answer1,
-          incorrectAnswer2: data.incorrect_answer2,
-          incorrectAnswer3: data.incorrect_answer3
-        })
-      })
+  async componentDidMount() {
+    const data = await getQuestion(this.props.match.params.id)
+    this.setState({
+      questionText: data.question,
+      category: data.category_id,
+      correctAnswer: data.correct_answer,
+      incorrectAnswer1: data.incorrect_answer1,
+      incorrectAnswer2: data.incorrect_answer2,
+      incorrectAnswer3: data.incorrect_answer3
+    })
   }
 
   render() {
