@@ -21,7 +21,7 @@ function App() {
               <Route path={`${url}/`} component={Admin} exact />
               <Route path={`${url}/questions`} component={Questions} exact />
               <Route path={`${url}/questions/new`} component={NewQuestion} />
-              <Route path={`${url}/questions/edit`} component={EditQuestion} />
+              <Route path={`${url}/questions/edit/:id`} component={EditQuestion} />
             </>
           )}
         />

@@ -52,7 +52,18 @@ class QuestionForm extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log(this.state)
+    if (this.props.questionText !== prevProps.questionText) {
+      this.setState({
+        questionText: this.props.questionText,
+        correctAnswer: this.props.correctAnswer,
+        incorrectAnswer1: this.props.incorrectAnswer1,
+        incorrectAnswer2: this.props.incorrectAnswer2,
+        incorrectAnswer3: this.props.incorrectAnswer3,
+        category: this.props.category,
+        allEntered: true
+      })
+    }
+
     if (this.state.questionText !== prevState.questionText ||
       this.state.correctAnswer !== prevState.correctAnswer ||
       this.state.incorrectAnswer1 !== prevState.incorrectAnswer1 ||
@@ -122,25 +133,50 @@ class QuestionForm extends React.Component {
       incorrectAnswer3, category
     } = this.state
 
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          categoryID: category,
-          question: questionText,
-          correctAnswer: correctAnswer,
-          incorrectAnswer1: incorrectAnswer1,
-          incorrectAnswer2: incorrectAnswer2,
-          incorrectAnswer3: incorrectAnswer3
-        })
-    }
+    if (this.props.newQuestion) {
+      const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            categoryID: category,
+            question: questionText,
+            correctAnswer: correctAnswer,
+            incorrectAnswer1: incorrectAnswer1,
+            incorrectAnswer2: incorrectAnswer2,
+            incorrectAnswer3: incorrectAnswer3
+          })
+      }
 
-    fetch(`${process.env.REACT_APP_SERVER_HOST}/newQuestion`, requestOptions)
-      .then(response =>
-        this.setState({
-          redirect: true
-        })
-      )
+      fetch(`${process.env.REACT_APP_SERVER_HOST}/newQuestion`, requestOptions)
+        .then(response =>
+          this.setState({
+            redirect: true
+          })
+        )
+    }
+    else {
+      const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            questionID: this.props.questionID,
+            categoryID: category,
+            question: questionText,
+            correctAnswer: correctAnswer,
+            incorrectAnswer1: incorrectAnswer1,
+            incorrectAnswer2: incorrectAnswer2,
+            incorrectAnswer3: incorrectAnswer3
+          })
+      }
+
+      fetch(`${process.env.REACT_APP_SERVER_HOST}/editQuestion`, requestOptions)
+        .then(response =>
+          this.setState({
+            redirect: true
+          })
+        )
+        .catch(err => console.log(err))
+    }
   }
 
   mapCategories(category, index) {
@@ -175,7 +211,7 @@ class QuestionForm extends React.Component {
           <CardHeader title={this.props.newQuestion ? "Add Question" : "Edit Question"} />
           <CardContent>
             <Grid direction="column" container>
-              <Grid item fullWidth>
+              <Grid item>
                 <FormControl>
                   <InputLabel htmlFor="category-select">Category</InputLabel>
                   <Select

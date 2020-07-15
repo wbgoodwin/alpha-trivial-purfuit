@@ -150,6 +150,36 @@ module.exports.deleteQuestion = function(questionID){
 		if(err) throw err;
 		sqldumpexporter();
 	});
+	con.commit();
+}
+
+module.exports.getQuestion = function(questionID) {
+	return questionList.find(q => q.id.toString() === questionID)
+}
+
+module.exports.editQuestion = function (
+	questionID,
+	categoryID,
+	question,
+	correctAnswer,
+	incorrectAnswer1,
+	incorrectAnswer2,
+	incorrectAnswer3
+) {
+	con.query(
+		`
+			UPDATE questions
+			SET category_id = ${categoryID}, question = '${question}',
+				correct_answer = '${correctAnswer}',
+				incorrect_answer1 = '${incorrectAnswer1}',
+				incorrect_answer2 = '${incorrectAnswer2}',
+				incorrect_answer3 = '${incorrectAnswer3}'
+			WHERE id = ${questionID};
+		`, function(err, result) {
+			if (err) throw err
+			sqldumpexporter()
+		})
+		con.commit()
 }
 
 module.exports.exportCategoryList = function(){

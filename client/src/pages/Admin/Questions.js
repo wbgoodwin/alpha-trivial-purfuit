@@ -34,7 +34,23 @@ class Questions extends React.Component {
 
   deleteClick(e) {
     var id = e.target.closest('.delete-icon').id.replace('question-', '')
-    console.log(id)
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: id
+        })
+    }
+
+    fetch(`${process.env.REACT_APP_SERVER_HOST}/deleteQuestion`, requestOptions)
+      .then(response => {
+          const { questions } = this.state
+          let newQuestions = [...questions]
+          newQuestions = newQuestions.filter(q => q.id.toString() !== id)
+          this.setState({
+            questions: newQuestions
+          })
+        })
   }
 
   mapQuestions(question, index) {
@@ -44,7 +60,7 @@ class Questions extends React.Component {
           {question.question}
         </TableCell>
         <TableCell style={{'width': '5%'}}>
-          <IconButton href={`/admin/questions/${question.id}`}>
+          <IconButton href={`/admin/questions/edit/${question.id}`}>
             <EditIcon style={{'cursor': 'pointer'}} />
           </IconButton>
         </TableCell>

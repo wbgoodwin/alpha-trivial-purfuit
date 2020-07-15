@@ -33,4 +33,23 @@ app.post('/newQuestion', function(req, res) {
   res.json({success: true})
 })
 
+app.post('/deleteQuestion', function(req, res) {
+  DataStorageController.deleteQuestion(req.body.id)
+  res.json({success: true})
+})
+
+app.post('/editQuestion', function(req, res) {
+  DataStorageController.editQuestion(
+    req.body.questionID, req.body.categoryID, req.body.question,
+    req.body.correctAnswer, req.body.incorrectAnswer1,
+    req.body.incorrectAnswer2, req.body.incorrectAnswer3
+  )
+  res.json({success: true})
+})
+
+app.get('/question/:questionID', function(req, res) {
+  const data = DataStorageController.getQuestion(req.params.questionID)
+  return res.json(data)
+})
+
 app.listen(API_PORT)
