@@ -4,6 +4,11 @@ import {
   InputLabel, FormControl
 } from '@material-ui/core'
 import { Redirect } from 'react-router-dom'
+import {
+  getCategories,
+  postNewQuestion,
+  postEditQuestion
+} from '../../controllers/AdminModuleController'
 
 class QuestionForm extends React.Component {
   constructor(props) {
@@ -28,27 +33,24 @@ class QuestionForm extends React.Component {
     this.categoryChange = this.categoryChange.bind(this)
   }
 
-  componentDidMount() {
-    fetch(`${process.env.REACT_APP_SERVER_HOST}/categories`)
-      .then(response => response.json())
-      .then(data => {
-        if (!this.props.newQuestion) {
-          this.setState({
-            categories: data,
-            questionText: this.props.questionText,
-            correctAnswer: this.props.correctAnswer,
-            incorrectAnswer1: this.props.incorrectAnswer1,
-            incorrectAnswer2: this.props.incorrectAnswer2,
-            incorrectAnswer3: this.props.incorrectAnswer3,
-            allEntered: true
-          })
-        }
-        else {
-          this.setState({
-            categories: data
-          })
-        }
+  async componentDidMount() {
+    const data = await getCategories()
+    if (!this.props.newQuestion) {
+      this.setState({
+        categories: data,
+        questionText: this.props.questionText,
+        correctAnswer: this.props.correctAnswer,
+        incorrectAnswer1: this.props.incorrectAnswer1,
+        incorrectAnswer2: this.props.incorrectAnswer2,
+        incorrectAnswer3: this.props.incorrectAnswer3,
+        allEntered: true
       })
+    }
+    else {
+      this.setState({
+        categories: data
+      })
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -127,55 +129,35 @@ class QuestionForm extends React.Component {
            incorrectAnswer2 && incorrectAnswer3 && category
   }
 
-  submit() {
+  async submit() {
     const {
       questionText, correctAnswer, incorrectAnswer1, incorrectAnswer2,
       incorrectAnswer3, category
     } = this.state
 
     if (this.props.newQuestion) {
-      const requestOptions = {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            categoryID: category,
-            question: questionText,
-            correctAnswer: correctAnswer,
-            incorrectAnswer1: incorrectAnswer1,
-            incorrectAnswer2: incorrectAnswer2,
-            incorrectAnswer3: incorrectAnswer3
-          })
-      }
+      const res = await postNewQuestion (
+        category, questionText, correctAnswer, incorrectAnswer1,
+        incorrectAnswer2, incorrectAnswer3
+      )
 
-      fetch(`${process.env.REACT_APP_SERVER_HOST}/newQuestion`, requestOptions)
-        .then(response =>
-          this.setState({
-            redirect: true
-          })
-        )
+      if (res) {
+        this.setState({
+          redirect: true
+        })
+      }
     }
     else {
-      const requestOptions = {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            questionID: this.props.questionID,
-            categoryID: category,
-            question: questionText,
-            correctAnswer: correctAnswer,
-            incorrectAnswer1: incorrectAnswer1,
-            incorrectAnswer2: incorrectAnswer2,
-            incorrectAnswer3: incorrectAnswer3
-          })
-      }
+      const res = await postEditQuestion(
+        this.props.questionID,  category, questionText, correctAnswer,
+        incorrectAnswer1, incorrectAnswer2, incorrectAnswer3
+      )
 
-      fetch(`${process.env.REACT_APP_SERVER_HOST}/editQuestion`, requestOptions)
-        .then(response =>
-          this.setState({
-            redirect: true
-          })
-        )
-        .catch(err => console.log(err))
+      if (res) {
+        this.setState({
+          redirect: true
+        })
+      }
     }
   }
 

@@ -9,6 +9,9 @@ import { Link as RRDLink, withRouter } from 'react-router-dom'
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteIcon from '@material-ui/icons/Delete'
 import AddIcon from '@material-ui/icons/Add'
+import {
+  postDeleteQuestion, getQuestions
+} from '../../controllers/AdminModuleController'
 
 class Questions extends React.Component {
   constructor(props) {
@@ -22,35 +25,25 @@ class Questions extends React.Component {
     this.deleteClick = this.deleteClick.bind(this)
   }
 
-  componentDidMount() {
-    fetch(`${process.env.REACT_APP_SERVER_HOST}/questions`)
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          questions: data
-        })
-      })
+  async componentDidMount() {
+    const data = await getQuestions()
+    this.setState({
+      questions: data
+    })
   }
 
-  deleteClick(e) {
+  async deleteClick(e) {
     var id = e.target.closest('.delete-icon').id.replace('question-', '')
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: id
-        })
-    }
+    const res = await postDeleteQuestion(id)
 
-    fetch(`${process.env.REACT_APP_SERVER_HOST}/deleteQuestion`, requestOptions)
-      .then(response => {
-          const { questions } = this.state
-          let newQuestions = [...questions]
-          newQuestions = newQuestions.filter(q => q.id.toString() !== id)
-          this.setState({
-            questions: newQuestions
-          })
-        })
+    if (res) {
+      const { questions } = this.state
+      let newQuestions = [...questions]
+      newQuestions = newQuestions.filter(q => q.id.toString() !== id)
+      this.setState({
+        questions: newQuestions
+      })
+    }
   }
 
   mapQuestions(question, index) {
