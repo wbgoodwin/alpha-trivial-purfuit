@@ -41,7 +41,7 @@ const Home = () => {
           <Grid item xs={4}>
             <Button variant="contained" size="large" fullWidth>
               <Link
-                to={"/"}
+                to={"/game"}
                 style={linkStyle}
               >
                 Start Playing

@@ -52,4 +52,9 @@ app.get('/question/:questionID', function(req, res) {
   return res.json(data)
 })
 
+app.get('/readQuestion/:categoryID', function(req, res) {
+  const data = DataStorageController.readAQuestion()
+  return res.json(data)
+})
+
 app.listen(API_PORT)

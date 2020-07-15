@@ -114,7 +114,7 @@ getCategories();
 // Exports
 
 module.exports.readAQuestion = function(){
-	return questionList[Math.random() * questionList.length];
+	return questionList[Math.floor(Math.random() * questionList.length)];
 }
 
 module.exports.updateCategoryName = function(categoryID, newCategoryName){

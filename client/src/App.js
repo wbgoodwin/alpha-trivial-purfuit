@@ -6,6 +6,7 @@ import Admin from './pages/Admin/Admin'
 import Questions from './pages/Admin/Questions'
 import NewQuestion from './pages/Admin/NewQuestion'
 import EditQuestion from './pages/Admin/EditQuestion'
+import Game from './pages/Game/Game'
 
 function App() {
   return (
@@ -22,6 +23,14 @@ function App() {
               <Route path={`${url}/questions`} component={Questions} exact />
               <Route path={`${url}/questions/new`} component={NewQuestion} />
               <Route path={`${url}/questions/edit/:id`} component={EditQuestion} />
+            </>
+          )}
+        />
+        <Route
+          path="/game"
+          render={({ match: { url } }) => (
+            <>
+              <Route path={`${url}/`} component={Game} exact />
             </>
           )}
         />
