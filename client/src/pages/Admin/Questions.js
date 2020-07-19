@@ -1,17 +1,16 @@
 import * as React from 'react'
 import Nav from '../../components/Nav'
 import {
-  Grid, Link, Typography, Table, TableBody, TableCell, TableRow, Paper,
-  IconButton, Button
+  Grid, Table, TableBody, TableCell, TableRow, Paper, IconButton, Button
 } from '@material-ui/core'
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
-import { Link as RRDLink, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteIcon from '@material-ui/icons/Delete'
 import AddIcon from '@material-ui/icons/Add'
 import {
   postDeleteQuestion, getQuestions
 } from '../../controllers/AdminModuleController'
+import Breadcrumbs from '../../components/Breadcrumbs'
 
 class Questions extends React.Component {
   constructor(props) {
@@ -76,32 +75,14 @@ class Questions extends React.Component {
     return (
       <React.Fragment>
         <Nav />
-        <Grid
-          container
-          style={{
-            'marginTop': '60px'
-          }}
-          justify="space-between"
+        <Breadcrumbs
+          links={[
+            {to: '/', name: 'Home'},
+            {to: '/admin', name: 'Administration Module'}
+          ]}
+          currentPage='Manage Questions'
         >
-          <Grid item style={{'marginLeft': '10px'}}>
-            <Link style={{'cursor': 'pointer'}} component="span">
-              <RRDLink to="/" style={{'textDecoration': 'none', 'color': 'inherit'}}>
-                Home
-              </RRDLink>
-            </Link>
-            <ArrowForwardIosIcon style={{'fontSize': '14', 'marginTop': '5px'}} />
-            <Link style={{'cursor': 'pointer'}} component="span">
-              <RRDLink to="/admin" style={{'textDecoration': 'none', 'color': 'inherit'}}>
-                Administration Module
-              </RRDLink>
-            </Link>
-            <ArrowForwardIosIcon style={{'fontSize': '14', 'marginTop': '5px'}} />
-            <Typography display="inline">
-              Manage Questions
-            </Typography>
-          </Grid>
-
-          <Grid item style={{'marginRight': '10px'}}>
+          <Grid item style={{'marginRight': '20px'}}>
             <Button
               startIcon={<AddIcon />}
               variant="contained"
@@ -110,7 +91,7 @@ class Questions extends React.Component {
               Add a Question
             </Button>
           </Grid>
-        </Grid>
+        </Breadcrumbs>
 
         <Grid container justify="center" style={{'marginTop': '20px'}}>
           <Paper style={{'width': '80%'}}>

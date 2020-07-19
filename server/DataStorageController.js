@@ -65,7 +65,7 @@ function getQuestions () {
 	pool.query("SELECT * FROM questions", async function (err, result, fields) {
 		if (err) {
 			handleEmptyDBError()
-			getQuestions()
+			return getQuestions()
 		}
 		else {
 			questionList = await result
@@ -89,6 +89,10 @@ function handleEmptyDBError () {
 	sqldumpImporter()
 }
 
+function sleep(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 let questionList
 getQuestions()
 let categoryList
@@ -99,31 +103,23 @@ module.exports.readAQuestion = function () {
 	return questionList[Math.floor(Math.random() * questionList.length)]
 }
 
-module.exports.updateCategoryName = function (categoryID, newCategoryName) {
-	pool.query(
-		`
-			UPDATE categories SET name = '${newCategoryName}'
-			WHERE id = '${categoryID}';
-		`, function(err, result) {
-		if (err) {
-			console.error(err)
-			return {}
-		}
-		getCategories()
-	})
-}
+module.exports.updateCategories = async function(categories) {
+	for (c in categories) {
+		const category = categories[c]
+		pool.query(
+			`
+				UPDATE categories
+				SET name = '${category.name}', color = '${category.color}'
+				WHERE id = ${category.id};
+			`, function(err, result) {
+				if (err) console.error(err)
+			}
+		)
+	}
 
-module.exports.updateCategoryColor = function (categoryID, newCategoryColor) {
-	pool.query(
-		`
-			UPDATE categories SET color = '${newCategoryColor}'
-			WHERE id = '${categoryID}';
-		`, function(err, result) {
-		if (err) {
-			console.error(err)
-		}
-		categoryList = getCategories()
-	})
+	// DB doesn't have enough time to commit w/o this sleep here
+	await sleep(300)
+	categoryList = getCategories()
 }
 
 module.exports.addNewQuestion = function (
@@ -202,7 +198,7 @@ module.exports.exportQuestionList = function() {
 
 module.exports.importQuestionList = function(newQuestionList) {
 	questionList = newQuestionList;
-	con.query("DROP TABLE questions;",function(err,result){
+	pool.query("DROP TABLE questions;",function(err,result){
 		if(err) throw err;
 	});
 	for(var i = 0; i < newQuestionList.length; i++) {

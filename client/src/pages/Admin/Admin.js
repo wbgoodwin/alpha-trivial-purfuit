@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { Grid, Paper, Button, Link, Typography } from '@material-ui/core'
+import { Grid, Paper, Button } from '@material-ui/core'
 import { Link as RRDLink, useRouteMatch } from 'react-router-dom'
 import Nav from '../../components/Nav'
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
+import Breadcrumbs from '../../components/Breadcrumbs'
 
 const Admin = () => {
   const { url } = useRouteMatch()
@@ -23,23 +23,13 @@ const Admin = () => {
   return (
     <React.Fragment>
       <Nav />
-      <Grid
-        container
-        style={{
-          'marginTop': '60px',
-          'marginLeft': '10px',
-        }}
-      >
-        <Link style={{'cursor': 'pointer'}} component="span">
-          <RRDLink to="/" style={{'textDecoration': 'none', 'color': 'inherit'}}>
-            Home
-          </RRDLink>
-        </Link>
-        <ArrowForwardIosIcon style={{'fontSize': '14', 'marginTop': '5px'}} />
-        <Typography>
-          Administration Module
-        </Typography>
-      </Grid>
+      <Breadcrumbs
+        links={[
+          {to: '/', name: 'Home'}
+        ]}
+        currentPage="Administration Module"
+      />
+
       <Grid container justify="center" alignItems="center">
         <Paper style={{
             'marginTop': '15px',

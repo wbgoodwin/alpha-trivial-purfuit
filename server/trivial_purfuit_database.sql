@@ -39,9 +39,24 @@ CREATE TABLE IF NOT EXISTS `questions` (
 # ------------------------------------------------------------
 
 INSERT INTO
-  `categories` (`id`, `name`, `color`)
+  `categories` (`name`, `color`)
 VALUES
-  (1, 'TestCat', '#000000');
+  ('People', '#f44336');
+
+INSERT INTO
+  `categories` (`name`, `color`)
+VALUES
+  ('Events', '#ffffff');
+
+INSERT INTO
+  `categories` (`name`, `color`)
+VALUES
+  ('Places', '#2196f3');
+
+INSERT INTO
+  `categories` (`name`, `color`)
+VALUES
+  ('Independence Day Holiday', '#4caf50');
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: questions
