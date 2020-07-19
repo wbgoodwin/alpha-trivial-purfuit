@@ -114,7 +114,7 @@ getCategories();
 // Exports
 
 module.exports.readAQuestion = function(){
-	return questionList[Math.random() * questionList.length];
+	return questionList[Math.floor(Math.random() * questionList.length)];
 }
 
 module.exports.updateCategoryName = function(categoryID, newCategoryName){
@@ -134,12 +134,15 @@ module.exports.updateCategoryColor = function(categoryID, newCategoryColor){
 }
 
 module.exports.addNewQuestion = function(categoryID, question, correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3){
-	con.query("INSERT INTO questions(`question`, `correct_answer`,`incorrect_answer1`, `incorrect_answer2`, `incorrect_answer3`, `category_id`)" +
-		"VALUES('" + question + "', '" + correctAnswer + "', '" + incorrectAnswer1 + "', '" + incorrectAnswer2 + "', '" + incorrectAnswer3 + "', " + categoryID + ");",
-		function(err, result){
-		if (err) throw err;
-		sqldumpexporter();
-	});
+	con.beginTransaction(function(err) {
+		con.query("INSERT INTO questions(`question`, `correct_answer`,`incorrect_answer1`, `incorrect_answer2`, `incorrect_answer3`, `category_id`)" +
+			"VALUES('" + question + "', '" + correctAnswer + "', '" + incorrectAnswer1 + "', '" + incorrectAnswer2 + "', '" + incorrectAnswer3 + "', " + categoryID + ");",
+			function(err, result){
+			if (err) throw err;
+			sqldumpexporter();
+		});
+		con.commit();
+	})
 }
 
 module.exports.deleteQuestion = function(questionID){
@@ -147,6 +150,36 @@ module.exports.deleteQuestion = function(questionID){
 		if(err) throw err;
 		sqldumpexporter();
 	});
+	con.commit();
+}
+
+module.exports.getQuestion = function(questionID) {
+	return questionList.find(q => q.id.toString() === questionID)
+}
+
+module.exports.editQuestion = function (
+	questionID,
+	categoryID,
+	question,
+	correctAnswer,
+	incorrectAnswer1,
+	incorrectAnswer2,
+	incorrectAnswer3
+) {
+	con.query(
+		`
+			UPDATE questions
+			SET category_id = ${categoryID}, question = '${question}',
+				correct_answer = '${correctAnswer}',
+				incorrect_answer1 = '${incorrectAnswer1}',
+				incorrect_answer2 = '${incorrectAnswer2}',
+				incorrect_answer3 = '${incorrectAnswer3}'
+			WHERE id = ${questionID};
+		`, function(err, result) {
+			if (err) throw err
+			sqldumpexporter()
+		})
+		con.commit()
 }
 
 module.exports.exportCategoryList = function(){
