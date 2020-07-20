@@ -130,3 +130,20 @@ export async function updateCategories(categories) {
 
   return success
 }
+
+export async function uploadQuestionFile(questions) {
+  const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        questions: questions
+      })
+  }
+
+  let success = false
+  await fetch(`${process.env.REACT_APP_SERVER_HOST}/uploadQuestionFile`, requestOptions)
+    .then(response => success = true)
+    .catch(err => console.log(err))
+
+  return success
+}

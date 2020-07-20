@@ -62,4 +62,9 @@ app.post('/updateCategories', function(req, res) {
   res.json({success: true})
 })
 
+app.post('/uploadQuestionFile', function(req, res) {
+  DataStorageController.uploadQuestionFile(req.body.questions)
+  res.json({success: true})
+})
+
 app.listen(API_PORT)

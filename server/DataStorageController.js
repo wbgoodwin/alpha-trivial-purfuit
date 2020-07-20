@@ -196,13 +196,26 @@ module.exports.exportQuestionList = function() {
 	return questionList;
 }
 
-module.exports.importQuestionList = function(newQuestionList) {
-	questionList = newQuestionList;
-	pool.query("DROP TABLE questions;",function(err,result){
-		if(err) throw err;
-	});
-	for(var i = 0; i < newQuestionList.length; i++) {
-		addNewQuestion(newQuestionList.category_id, newQuestionList.question, newQuestionList.correct_answer,
-			newQuestionList.incorrect_answer1, newQuestionList.incorrect_answer2, newQuestionList.incorrect_answer3);
-    }
+module.exports.uploadQuestionFile = async function(questions) {
+	for (q in questions) {
+		const question = questions[q]
+
+		pool.query(
+			`
+			INSERT INTO questions (question, correct_answer, incorrect_answer1,
+														 incorrect_answer2, incorrect_answer3, category_id)
+			VALUES ('${question.question}', '${question.correct_answer}',
+							'${question.incorrect_answer1}', '${question.incorrect_answer2}',
+							'${question.incorrect_answer3}', ${question.category_id}
+						)
+			`, function(err, result) {
+				if (err) {
+					console.error(err)
+				}
+			}
+		)
+	}
+
+	await sleep(300)
+	questionList = getQuestions()
 }
