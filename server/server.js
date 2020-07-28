@@ -1,6 +1,8 @@
 const express = require('express')
 const cors = require('cors')
+const path = require('path')
 const bodyParser = require('body-parser')
+require('dotenv-safe').config()
 
 const app = express()
 app.use(cors())
@@ -9,9 +11,15 @@ app.use(bodyParser.json())
 const API_PORT = 3001
 const DataStorageController = require('./DataStorageController')
 
+if (process.env.environment === 'production') {
+  app.use(express.static(path.join(__dirname, 'build')))
+}
+else {
+  app.use(express.static(path.join(__dirname, '../client/build')))
+}
 
-app.get('/', function (req, res) {
-  res.send('Hello World')
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 })
 
 app.get('/questions', function(req, res) {

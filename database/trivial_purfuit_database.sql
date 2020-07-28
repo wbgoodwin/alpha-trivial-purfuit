@@ -6,6 +6,14 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+DROP DATABASE IF EXISTS `trivial_purfuit_database`;
+CREATE DATABASE `trivial_purfuit_database`;
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
+FLUSH PRIVILEGES;
+
+USE `trivial_purfuit_database`;
+
 # ------------------------------------------------------------
 # SCHEMA DUMP FOR TABLE: categories
 # ------------------------------------------------------------
@@ -39,24 +47,24 @@ CREATE TABLE IF NOT EXISTS `questions` (
 # ------------------------------------------------------------
 
 INSERT INTO
-  `categories` (`name`, `color`)
+  `categories` (`id`, `name`, `color`)
 VALUES
-  ('People', '#f44336');
+  (1, 'People', '#f44336');
 
 INSERT INTO
-  `categories` (`name`, `color`)
+  `categories` (`id`, `name`, `color`)
 VALUES
-  ('Events', '#ffffff');
+  (2, 'Events', '#ffffff');
 
 INSERT INTO
-  `categories` (`name`, `color`)
+  `categories` (`id`, `name`, `color`)
 VALUES
-  ('Places', '#2196f3');
+  (3, 'Places', '#2196f3');
 
 INSERT INTO
-  `categories` (`name`, `color`)
+  `categories` (`id`, `name`, `color`)
 VALUES
-  ('Independence Day Holiday', '#4caf50');
+  (4, 'Independence Day Holiday', '#4caf50');
 
 # ------------------------------------------------------------
 # DATA DUMP FOR TABLE: questions
@@ -94,13 +102,13 @@ INSERT INTO
   )
 VALUES
   (
-    7,
-    'Test Question 4',
+    2,
+    'Test Question 2',
     'Correct Answer',
     'Incorrect Answer 1',
     'Incorrect Answer 2',
     'Incorrect Answer 3',
-    1
+    2
   );
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
