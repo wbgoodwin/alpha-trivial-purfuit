@@ -15,18 +15,11 @@ https://anansewaa.com/gyp-no-xcode-or-clt-version-detected-macos-catalina/
 - The app should be running on http://localhost:3000 in your browser.
 - Use any text editor/IDE for editing the code. I use [VScode](https://code.visualstudio.com) and like it
 
-### Start up development server using Docker
+### Start up services using Docker Compose
 - If you do not have Docker installed you can download it [here](https://www.docker.com/get-started)
 - Run the following command to start up all Docker services:
 ```
-docker-compose -f docker-compose.dev.yml up
-```
-
-### Start up production server using Docker
-- If you do not have Docker installed you can download it [here](https://www.docker.com/get-started)
-- Run the following command to start up all Docker services:
-```
-docker-compose -f docker-compose.yml up
+docker-compose up
 ```
 
 ### Mysql set-up help

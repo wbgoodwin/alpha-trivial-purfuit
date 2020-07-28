@@ -8,8 +8,6 @@
 
 DROP DATABASE IF EXISTS `trivial_purfuit_database`;
 CREATE DATABASE `trivial_purfuit_database`;
-
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
 FLUSH PRIVILEGES;
 
 USE `trivial_purfuit_database`;

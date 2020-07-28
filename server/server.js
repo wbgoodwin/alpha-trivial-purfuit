@@ -11,15 +11,8 @@ app.use(bodyParser.json())
 const API_PORT = 3001
 const DataStorageController = require('./DataStorageController')
 
-if (process.env.environment === 'production') {
-  app.use(express.static(path.join(__dirname, 'build')))
-}
-else {
-  app.use(express.static(path.join(__dirname, '../client/build')))
-}
-
 app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.json('Hello world')
 })
 
 app.get('/questions', function(req, res) {

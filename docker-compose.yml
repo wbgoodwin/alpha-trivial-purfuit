@@ -9,7 +9,7 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - ./database/trivial_purfuit_database.sql:/data/application/init.sql
+      - ./database/docker_trivial_purfuit_database.sql:/data/application/init.sql
   client:
     build:
       context: ./client
@@ -25,5 +25,6 @@ services:
       - 3001:3001
     links:
       - database
+    command: ./wait_for_it.sh database:3306 -- ./init.sh
     depends_on:
       - database
