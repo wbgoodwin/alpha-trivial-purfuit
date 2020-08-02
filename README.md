@@ -22,6 +22,13 @@ https://anansewaa.com/gyp-no-xcode-or-clt-version-detected-macos-catalina/
 docker-compose up
 ```
 
+### Run backend tests using Docker Compose
+- If you do not have Docker installed you can download it [here](https://www.docker.com/get-started)
+- Run the following command:
+```
+docker-compose -f docker-compose.test.yml up
+```
+
 ### Mysql set-up help
 The following is how I (Will) set up my mysql db
 - I used Docker. If you do not have docker installed you can install it [here](https://www.docker.com/get-started)
