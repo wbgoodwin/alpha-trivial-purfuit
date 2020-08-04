@@ -21,7 +21,6 @@ const Die = () => {
 
     return (
         <div className="Die">
-            {rolledValue}
             <br/>
             <Button
                 disabled={!dieCanBeRolled}
@@ -31,6 +30,9 @@ const Die = () => {
             >
               Roll Die
             </Button>
+            <br/>
+            <br/>
+            {rolledValue}
         </div>
     )
 }

@@ -3,6 +3,7 @@ import { Stage, Layer } from 'react-konva';
 import BoardSquare from './BoardSquare'
 import Die from '../Die'
 import Category from '../Category'
+import './GameBoard.css'
 
 class GameBoard extends Component {
     constructor(props) {
@@ -10,24 +11,29 @@ class GameBoard extends Component {
         this.state = {
             boardSquares: []
         }
+        let pageWidth = window.innerWidth
         this.width = window.innerWidth;
         this.center = (this.width/2) + 150;
         this.squareSide = 100;
-        this.topOfBoard = 100;
+        this.topOfBoard = 20;
     }
 
     componentDidMount() {
         this.setState({
         boardSquares: []
         })
+
     }
 
 
   render() {
     return (
-        <div>
-        <Die />
-        <Stage width={window.innerWidth} height={window.innerHeight}>
+        <div className="row">
+          <div className="column left">
+            <Die />
+          </div>
+          <div id="board" className="column right">
+          <Stage width={window.innerWidth} height={window.innerHeight}>
         <Layer>
         <BoardSquare x={this.center - (4 * this.squareSide)} y={this.topOfBoard} category="red" />
           <BoardSquare x={this.center - (3 * this.squareSide)} y={this.topOfBoard} category="red"/>
@@ -87,6 +93,7 @@ class GameBoard extends Component {
           
         </Layer>
       </Stage>
+          </div>
       </div>
     )
   }
