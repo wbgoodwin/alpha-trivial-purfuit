@@ -129,6 +129,10 @@ const Help = () => {
                       <em>EXPORT QUESTION FILE</em> page allows administrator to
                       export the current question database into a file.
                     </li>
+                    <li>
+                      <em>EXPORT CATEGORY FILE</em> page allows administrator to
+                      export the current categories into a file.
+                    </li>
                   </ul>
                   <br />
                   <li>Help Page</li>

@@ -4,7 +4,7 @@
 - If you do not already have it, go to https://nodejs.org/en/ and downlaod the LTS version of node. This install already includes npm as well.
 - Clone this repo to your machine
 - Open up a terminal and navigate to the /server directory for this project.
-- Run `npm install` 
+- Run `npm install`
 - Once the install is finished run `npm start`
 - Run `npm install` and `npm start` in a separate terminal for the /client directory as well.
 
@@ -14,6 +14,20 @@ https://anansewaa.com/gyp-no-xcode-or-clt-version-detected-macos-catalina/
 
 - The app should be running on http://localhost:3000 in your browser.
 - Use any text editor/IDE for editing the code. I use [VScode](https://code.visualstudio.com) and like it
+
+### Start up services using Docker Compose
+- If you do not have Docker installed you can download it [here](https://www.docker.com/get-started)
+- Run the following command to start up all Docker services:
+```
+docker-compose up
+```
+
+### Run backend tests using Docker Compose
+- If you do not have Docker installed you can download it [here](https://www.docker.com/get-started)
+- Run the following command:
+```
+docker-compose -f docker-compose.test.yml up
+```
 
 ### Mysql set-up help
 The following is how I (Will) set up my mysql db

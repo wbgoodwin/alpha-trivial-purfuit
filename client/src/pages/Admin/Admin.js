@@ -1,45 +1,48 @@
 import * as React from 'react'
-import { Grid, Paper, Button, Link, Typography } from '@material-ui/core'
+import { Grid, Paper, Button } from '@material-ui/core'
 import { Link as RRDLink, useRouteMatch } from 'react-router-dom'
 import Nav from '../../components/Nav'
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
+import Breadcrumbs from '../../components/Breadcrumbs'
+import { CSVLink } from 'react-csv'
+import {
+  getQuestions, getCategories
+} from '../../controllers/AdminModuleController'
 
 const Admin = () => {
   const { url } = useRouteMatch()
+  const [questions, setQuestions] = React.useState([])
+  const [categories, setCategories] = React.useState([])
+
+  React.useEffect(() => {
+    async function getQuestionData() {
+      const data = await getQuestions()
+      setQuestions(data)
+    }
+
+    async function getCategoryData() {
+      const data = await getCategories()
+      setCategories(data)
+    }
+
+    getQuestionData()
+    getCategoryData()
+  }, [])
 
   const linkStyle = {
     'textDecoration': 'none',
     'color': '#000000'
   }
 
-  function importClick() {
-    console.log("Clicked import")
-  }
-
-  function exportClick() {
-    console.log("Clicked export")
-  }
-
   return (
     <React.Fragment>
       <Nav />
-      <Grid
-        container
-        style={{
-          'marginTop': '60px',
-          'marginLeft': '10px',
-        }}
-      >
-        <Link style={{'cursor': 'pointer'}} component="span">
-          <RRDLink to="/" style={{'textDecoration': 'none', 'color': 'inherit'}}>
-            Home
-          </RRDLink>
-        </Link>
-        <ArrowForwardIosIcon style={{'fontSize': '14', 'marginTop': '5px'}} />
-        <Typography>
-          Administration Module
-        </Typography>
-      </Grid>
+      <Breadcrumbs
+        links={[
+          {to: '/', name: 'Home'}
+        ]}
+        currentPage="Administration Module"
+      />
+
       <Grid container justify="center" alignItems="center">
         <Paper style={{
             'marginTop': '15px',
@@ -83,14 +86,37 @@ const Admin = () => {
             </Grid>
 
             <Grid item xs={4}>
-              <Button variant="contained" size="large" onClick={importClick} fullWidth>
-                Import Question File
+              <Button variant="contained" size="large" fullWidth>
+                <RRDLink
+                  to={`${url}/questions/import`}
+                  style={linkStyle}
+                >
+                  Import Question File
+                </RRDLink>
               </Button>
             </Grid>
 
             <Grid item xs={4}>
-              <Button variant="contained" size="large" onClick={exportClick} fullWidth>
-                Export Question File
+              <Button variant="contained" size="large" fullWidth>
+                <CSVLink
+                  data={questions}
+                  style={linkStyle}
+                  filename={`trivial_purfuit_questions_${new Date().getTime()}.csv`}
+                >
+                  Export Question File
+                </CSVLink>
+              </Button>
+            </Grid>
+
+            <Grid item xs={4}>
+              <Button variant="contained" size="large" fullWidth>
+                <CSVLink
+                  data={categories}
+                  style={linkStyle}
+                  filename={`trivial_purfuit_categories_${new Date().getTime()}.csv`}
+                >
+                  Export Category File
+                </CSVLink>
               </Button>
             </Grid>
 

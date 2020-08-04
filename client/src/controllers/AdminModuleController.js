@@ -113,3 +113,37 @@ export async function getQuestion(id) {
 
   return question
 }
+
+export async function updateCategories(categories) {
+  const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        categories: categories
+      })
+  }
+
+  let success = false
+  await fetch(`${process.env.REACT_APP_SERVER_HOST}/updateCategories`, requestOptions)
+    .then(response => success = true)
+    .catch(err => console.log(err))
+
+  return success
+}
+
+export async function uploadQuestionFile(questions) {
+  const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        questions: questions
+      })
+  }
+
+  let success = false
+  await fetch(`${process.env.REACT_APP_SERVER_HOST}/uploadQuestionFile`, requestOptions)
+    .then(response => success = true)
+    .catch(err => console.log(err))
+
+  return success
+}

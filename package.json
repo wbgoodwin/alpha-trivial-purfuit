@@ -20,7 +20,8 @@
   },
   "homepage": "https://github.com/wbgoodwin/alpha-trivial-purfuit#readme",
   "dependencies": {
-    "concurrently": "^5.2.0"
+    "concurrently": "^5.2.0",
+    "react-csv": "^2.0.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
