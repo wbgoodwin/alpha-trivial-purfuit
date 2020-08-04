@@ -1,6 +1,8 @@
 const express = require('express')
 const cors = require('cors')
+const path = require('path')
 const bodyParser = require('body-parser')
+require('dotenv-safe').config()
 
 const app = express()
 app.use(cors())
@@ -9,18 +11,17 @@ app.use(bodyParser.json())
 const API_PORT = 3001
 const DataStorageController = require('./DataStorageController')
 
-
-app.get('/', function (req, res) {
-  res.send('Hello World')
+app.get('/', function(req, res) {
+  res.json('Hello world')
 })
 
-app.get('/questions', function(req, res) {
-  const data = DataStorageController.exportQuestionList()
+app.get('/questions', async function(req, res) {
+  const data = await DataStorageController.exportQuestionList()
   res.json(data)
 })
 
-app.get('/categories', function(req, res) {
-  const data = DataStorageController.exportCategoryList()
+app.get('/categories', async function(req, res) {
+  const data = await DataStorageController.exportCategoryList()
   res.json(data)
 })
 
@@ -47,14 +48,24 @@ app.post('/editQuestion', function(req, res) {
   res.json({success: true})
 })
 
-app.get('/question/:questionID', function(req, res) {
-  const data = DataStorageController.getQuestion(req.params.questionID)
+app.get('/question/:questionID', async function(req, res) {
+  const data = await DataStorageController.getQuestion(req.params.questionID)
   return res.json(data)
 })
 
 app.get('/readQuestion/:categoryID', function(req, res) {
   const data = DataStorageController.readAQuestion()
   return res.json(data)
+})
+
+app.post('/updateCategories', function(req, res) {
+  DataStorageController.updateCategories(req.body.categories)
+  res.json({success: true})
+})
+
+app.post('/uploadQuestionFile', function(req, res) {
+  DataStorageController.uploadQuestionFile(req.body.questions)
+  res.json({success: true})
 })
 
 app.listen(API_PORT)

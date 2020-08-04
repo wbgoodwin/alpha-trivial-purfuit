@@ -210,7 +210,8 @@ class QuestionForm extends React.Component {
               </Grid>
 
               <Grid item>
-                <TextField id="question-text"
+                <TextField
+                  id="question-text"
                   margin="normal"
                   fullWidth
                   label="Question Text"

@@ -1,0 +1,30 @@
+version: '3.0'
+services:
+  database:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password --init-file /data/application/init.sql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3306:3306
+    volumes:
+      - ./database/docker_trivial_purfuit_database.sql:/data/application/init.sql
+  client:
+    build:
+      context: ./client
+    tty: true
+    ports:
+      - 3000:3000
+    links:
+      - server
+  server:
+    build:
+      context: ./server
+    ports:
+      - 3001:3001
+    links:
+      - database
+    command: ./wait_for_it.sh database:3306 -- ./init.sh
+    depends_on:
+      - database

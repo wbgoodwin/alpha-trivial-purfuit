@@ -13,36 +13,33 @@ const host = process.env.DB_HOST;
 const user = process.env.DB_USER;
 const password = process.env.DB_PASSWORD;
 const database = process.env.DB_DATABASE;
+const port = process.env.DB_PORT;
 
 // Establish a connection to the database
-const mySQL = require('mysql')
-const con = mySQL.createConnection({
-	'host': host,
-	'user': user,
-	'password': password,
-	'database': database
-})
-con.connect(function(err){
-	if (err) throw err
-	con.query('CREATE DATABASE IF NOT EXISTS ' + database, function(err, result){
-		if (err) throw err
-	})
+const mysql = require('mysql')
+const pool = mysql.createPool({
+	connectionLimit: 10,
+	host: host,
+	user: user,
+	password: password,
+	database: database,
+	port: port
 })
 
 // Import database from file
 const Importer = require('mysql-import');
 const importer = new Importer({host, user, password, database});
 function sqldumpImporter(){
-	importer.import('./' + database + '.sql').then(()=>{
+	importer.import(`./${database}.sql`).then(()=>{
 		console.log('SQL file imported.');
-	}).catch(err=>{
+	}).catch(err => {
 		console.error(err);
 	});
 }
 
 // Export database to file
 var db_file_writer = require('mysqldump');
-function sqldumpexporter(){
+function sqldumpexporter() {
 	db_file_writer({
 		connection: {
 			host: host,
@@ -50,110 +47,106 @@ function sqldumpexporter(){
 			password: password,
 			database: database,
 		},
-		dumpToFile: './' + database + '.sql',
+		dumpToFile: `./${database}.sql`
 	});
 }
 
-function getCategories(){
-	con.query("SELECT * FROM categories", function (err, result, fields){
-		if(err)
-		{
-			con.query("DROP TABLE IF EXISTS questions", function (err, result){
-				if (err) throw err;
-			});
-			con.query("DROP TABLE IF EXISTS categories", function (err, result){
-				if (err) throw err;
-			});
-
-			// Empty or bad database
-			sqldumpImporter();
-
-			con.query("SELECT * FROM categories", function (err, result, fields){
-				if (err) throw err;
-				categoryList = result;
-			});
-		}
-		else
-		{
-			categoryList = result;
-		}
-	});
-}
-
-function getQuestions(){
-	con.query("SELECT * FROM questions", function (err, result, fields){
-		if(err)
-		{
-			con.query("DROP TABLE IF EXISTS questions", function (err, result){
-				if (err) throw err;
-			});
-			con.query("DROP TABLE IF EXISTS categories", function (err, result){
-				if (err) throw err;
-			});
-
-			// Empty or bad database
-			sqldumpImporter();
-
-			con.query("SELECT * FROM questions", function (err, result, fields){
-				if (err) throw err;
-				questionList = result;
-			});
-		}
-		else
-		{
-			questionList = result;
-		}
-	});
-}
-
-var questionList;
-getQuestions();
-var categoryList;
-getCategories();
-
-// Exports
-
-module.exports.readAQuestion = function(){
-	return questionList[Math.floor(Math.random() * questionList.length)];
-}
-
-module.exports.updateCategoryName = function(categoryID, newCategoryName){
-	con.query("UPDATE categories SET name = '" + newCategoryName + "' WHERE id = " + categoryID + ";", function (err, result){
-		if (err) throw err;
-		sqldumpexporter();
-		getCategories();
-	});
-}
-
-module.exports.updateCategoryColor = function(categoryID, newCategoryColor){
-	con.query("UPDATE categories SET color = '" + newCategoryColor + "' WHERE id = " + categoryID + ";", function (err, result){
-		if (err) throw err;
-		sqldumpexporter();
-		getQuestions();
-	});
-}
-
-module.exports.addNewQuestion = function(categoryID, question, correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3){
-	con.beginTransaction(function(err) {
-		con.query("INSERT INTO questions(`question`, `correct_answer`,`incorrect_answer1`, `incorrect_answer2`, `incorrect_answer3`, `category_id`)" +
-			"VALUES('" + question + "', '" + correctAnswer + "', '" + incorrectAnswer1 + "', '" + incorrectAnswer2 + "', '" + incorrectAnswer3 + "', " + categoryID + ");",
-			function(err, result){
-			if (err) throw err;
-			sqldumpexporter();
-		});
-		con.commit();
+function getCategories () {
+	return new Promise(function(resolve, reject) {
+		pool.query("SELECT * FROM categories", function (err, result, fields) {
+			if (err) {
+				console.error(err)
+				reject(err)
+			}
+			else {
+				return resolve(result)
+			}
+		})
 	})
 }
 
-module.exports.deleteQuestion = function(questionID){
-	con.query("DELETE FROM questions WHERE id = " + questionID + ";",function(err,result){
-		if(err) throw err;
-		sqldumpexporter();
-	});
-	con.commit();
+function getQuestions () {
+	return new Promise(function(resolve, reject) {
+		pool.query("SELECT * FROM questions", function (err, result, fields) {
+			if (err) {
+				console.error(err)
+				reject(err)
+			}
+			else {
+				return resolve(result)
+			}
+		})
+	})
 }
 
-module.exports.getQuestion = function(questionID) {
+function handleEmptyDBError () {
+	pool.query("DROP TABLE IF EXISTS questions", function (err, result) {
+		if (err) {
+			console.error(err)
+		}
+	})
+	pool.query("DROP TABLE IF EXISTS categories", function (err, result) {
+		if (err) {
+			console.error(err)
+		}
+	})
+
+	// Empty or bad database
+	sqldumpImporter()
+}
+
+// Exports --------------------------------------------------------------------
+module.exports.readAQuestion = async function () {
+	const questionList = await getQuestions()
+	return questionList[Math.floor(Math.random() * questionList.length)]
+}
+
+module.exports.updateCategories = async function(categories) {
+	for (c in categories) {
+		const category = categories[c]
+		pool.query(
+			`
+				UPDATE categories
+				SET name = '${category.name}', color = '${category.color}'
+				WHERE id = ${category.id};
+			`, function(err, result) {
+				if (err) console.error(err)
+			}
+		)
+	}
+}
+
+module.exports.addNewQuestion = function (
+	categoryID,
+	question,
+	correctAnswer,
+	incorrectAnswer1,
+	incorrectAnswer2,
+	incorrectAnswer3
+) {
+	pool.query(
+		`
+			INSERT INTO questions (question, correct_answer, incorrect_answer1,
+														 incorrect_answer2, incorrect_answer3, category_id)
+			VALUES ('${question}', '${correctAnswer}', '${incorrectAnswer1}',
+						  '${incorrectAnswer2}', '${incorrectAnswer3}', ${categoryID});
+		`, function(err, result) {
+			if (err) console.error(err)
+		})
+}
+
+module.exports.deleteQuestion = function(questionID) {
+	pool.query(
+		`
+			DELETE FROM questions WHERE id = ${questionID};
+		`, function(err, result) {
+			if (err) console.error(err)
+		}
+	)
+}
+
+module.exports.getQuestion = async function(questionID) {
+	const questionList = await getQuestions()
 	return questionList.find(q => q.id.toString() === questionID)
 }
 
@@ -166,7 +159,7 @@ module.exports.editQuestion = function (
 	incorrectAnswer2,
 	incorrectAnswer3
 ) {
-	con.query(
+	pool.query(
 		`
 			UPDATE questions
 			SET category_id = ${categoryID}, question = '${question}',
@@ -176,27 +169,32 @@ module.exports.editQuestion = function (
 				incorrect_answer3 = '${incorrectAnswer3}'
 			WHERE id = ${questionID};
 		`, function(err, result) {
-			if (err) throw err
-			sqldumpexporter()
+			if (err) console.error(err)
 		})
-		con.commit()
 }
 
-module.exports.exportCategoryList = function(){
-	return categoryList;
+module.exports.exportCategoryList = async function() {
+	return await getCategories()
 }
 
-module.exports.exportQuestionList = function(){
-	return questionList;
+module.exports.exportQuestionList = async function() {
+	return await getQuestions()
 }
 
-module.exports.importQuestionList = function(newQuestionList){
-	questionList = newQuestionList;
-	con.query("DROP TABLE questions;",function(err,result){
-		if(err) throw err;
-	});
-	for(var i = 0; i < newQuestionList.length; i++) {
-		addNewQuestion(newQuestionList.category_id, newQuestionList.question, newQuestionList.correct_answer,
-			newQuestionList.incorrect_answer1, newQuestionList.incorrect_answer2, newQuestionList.incorrect_answer3);
-    }
+module.exports.uploadQuestionFile = async function(questions) {
+	for (q in questions) {
+		const question = questions[q]
+
+		pool.query(
+			`
+			INSERT INTO questions (question, correct_answer, incorrect_answer1,
+														 incorrect_answer2, incorrect_answer3, category_id)
+			VALUES ('${question.question}', '${question.correct_answer}',
+							'${question.incorrect_answer1}', '${question.incorrect_answer2}',
+							'${question.incorrect_answer3}', ${question.category_id}
+						)
+			`, function(err, result) {
+				if (err) console.error(err)
+			})
+	}
 }
