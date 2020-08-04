@@ -15,13 +15,13 @@ app.get('/', function(req, res) {
   res.json('Hello world')
 })
 
-app.get('/questions', function(req, res) {
-  const data = DataStorageController.exportQuestionList()
+app.get('/questions', async function(req, res) {
+  const data = await DataStorageController.exportQuestionList()
   res.json(data)
 })
 
-app.get('/categories', function(req, res) {
-  const data = DataStorageController.exportCategoryList()
+app.get('/categories', async function(req, res) {
+  const data = await DataStorageController.exportCategoryList()
   res.json(data)
 })
 
@@ -48,8 +48,8 @@ app.post('/editQuestion', function(req, res) {
   res.json({success: true})
 })
 
-app.get('/question/:questionID', function(req, res) {
-  const data = DataStorageController.getQuestion(req.params.questionID)
+app.get('/question/:questionID', async function(req, res) {
+  const data = await DataStorageController.getQuestion(req.params.questionID)
   return res.json(data)
 })
 

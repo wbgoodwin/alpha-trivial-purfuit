@@ -52,26 +52,30 @@ function sqldumpexporter() {
 }
 
 function getCategories () {
-	pool.query('SELECT * FROM categories', async function(err, result, fields) {
-		if (err) {
-			handleEmptyDBError()
-			return getCategories()
-		}
-		else {
-			categoryList = await result
-		}
+	return new Promise(function(resolve, reject) {
+		pool.query("SELECT * FROM categories", function (err, result, fields) {
+			if (err) {
+				console.error(err)
+				reject(err)
+			}
+			else {
+				return resolve(result)
+			}
+		})
 	})
 }
 
 function getQuestions () {
-	pool.query("SELECT * FROM questions", async function (err, result, fields) {
-		if (err) {
-			handleEmptyDBError()
-			return getQuestions()
-		}
-		else {
-			questionList = await result
-		}
+	return new Promise(function(resolve, reject) {
+		pool.query("SELECT * FROM questions", function (err, result, fields) {
+			if (err) {
+				console.error(err)
+				reject(err)
+			}
+			else {
+				return resolve(result)
+			}
+		})
 	})
 }
 
@@ -91,17 +95,9 @@ function handleEmptyDBError () {
 	sqldumpImporter()
 }
 
-function sleep(ms) {
-	return new Promise(resolve => setTimeout(resolve, ms))
-}
-
-let questionList
-getQuestions()
-let categoryList
-getCategories()
-
 // Exports --------------------------------------------------------------------
-module.exports.readAQuestion = function () {
+module.exports.readAQuestion = async function () {
+	const questionList = await getQuestions()
 	return questionList[Math.floor(Math.random() * questionList.length)]
 }
 
@@ -118,10 +114,6 @@ module.exports.updateCategories = async function(categories) {
 			}
 		)
 	}
-
-	// DB doesn't have enough time to commit w/o this sleep here
-	await sleep(300)
-	categoryList = getCategories()
 }
 
 module.exports.addNewQuestion = function (
@@ -131,7 +123,7 @@ module.exports.addNewQuestion = function (
 	incorrectAnswer1,
 	incorrectAnswer2,
 	incorrectAnswer3
-){
+) {
 	pool.query(
 		`
 			INSERT INTO questions (question, correct_answer, incorrect_answer1,
@@ -139,28 +131,22 @@ module.exports.addNewQuestion = function (
 			VALUES ('${question}', '${correctAnswer}', '${incorrectAnswer1}',
 						  '${incorrectAnswer2}', '${incorrectAnswer3}', ${categoryID});
 		`, function(err, result) {
-			if (err) {
-				console.error(err)
-			}
-			questionList = getQuestions()
-		}
-	)
+			if (err) console.error(err)
+		})
 }
 
 module.exports.deleteQuestion = function(questionID) {
 	pool.query(
 		`
 			DELETE FROM questions WHERE id = ${questionID};
-		`, function(err,result) {
-			if (err) {
-				console.error(err)
-			}
-			questionList = getQuestions()
+		`, function(err, result) {
+			if (err) console.error(err)
 		}
 	)
 }
 
-module.exports.getQuestion = function(questionID) {
+module.exports.getQuestion = async function(questionID) {
+	const questionList = await getQuestions()
 	return questionList.find(q => q.id.toString() === questionID)
 }
 
@@ -183,19 +169,16 @@ module.exports.editQuestion = function (
 				incorrect_answer3 = '${incorrectAnswer3}'
 			WHERE id = ${questionID};
 		`, function(err, result) {
-			if (err) {
-				console.error(err)
-			}
-			questionList = getQuestions()
+			if (err) console.error(err)
 		})
 }
 
-module.exports.exportCategoryList = function() {
-	return categoryList;
+module.exports.exportCategoryList = async function() {
+	return await getCategories()
 }
 
-module.exports.exportQuestionList = function() {
-	return questionList;
+module.exports.exportQuestionList = async function() {
+	return await getQuestions()
 }
 
 module.exports.uploadQuestionFile = async function(questions) {
@@ -211,13 +194,7 @@ module.exports.uploadQuestionFile = async function(questions) {
 							'${question.incorrect_answer3}', ${question.category_id}
 						)
 			`, function(err, result) {
-				if (err) {
-					console.error(err)
-				}
-			}
-		)
+				if (err) console.error(err)
+			})
 	}
-
-	await sleep(300)
-	questionList = getQuestions()
 }

@@ -11,4 +11,3 @@ ENV DB_PORT=3306
 COPY package.json ./
 RUN npm install
 COPY . .
-CMD ["sh", "-c", "npm run db:migrate && npm run db:seed && npm start"]
