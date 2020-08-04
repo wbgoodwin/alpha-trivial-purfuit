@@ -46,35 +46,7 @@ const Help = () => {
               Home
             </RRDLink>
           </Link>
-          <Link style={{ cursor: "pointer" }} component="span">
-            <RRDLink
-              to="/game"
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              Game
-            </RRDLink>
-          </Link>
-          <Link style={{ cursor: "pointer" }} component="span">
-            <RRDLink
-              to="/admin"
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              Admin
-            </RRDLink>
-          </Link>
-
-          <Link
-            style={{ cursor: "pointer" }}
-            color="textPrimary"
-            aria-current="page"
-          >
-            <RRDLink
-              to="/help"
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              Help
-            </RRDLink>
-          </Link>
+          <Typography color="textPrimary">Help</Typography>
         </Breadcrumbs>
       </Grid>
 
