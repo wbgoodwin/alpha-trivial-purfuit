@@ -57,4 +57,14 @@ app.get('/readQuestion/:categoryID', function(req, res) {
   return res.json(data)
 })
 
+app.post('/updateCategories', function(req, res) {
+  DataStorageController.updateCategories(req.body.categories)
+  res.json({success: true})
+})
+
+app.post('/uploadQuestionFile', function(req, res) {
+  DataStorageController.uploadQuestionFile(req.body.questions)
+  res.json({success: true})
+})
+
 app.listen(API_PORT)
