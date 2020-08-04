@@ -1,6 +1,8 @@
 const express = require('express')
 const cors = require('cors')
+const path = require('path')
 const bodyParser = require('body-parser')
+require('dotenv-safe').config()
 
 const app = express()
 app.use(cors())
@@ -9,9 +11,8 @@ app.use(bodyParser.json())
 const API_PORT = 3001
 const DataStorageController = require('./DataStorageController')
 
-
-app.get('/', function (req, res) {
-  res.send('Hello World')
+app.get('/', function(req, res) {
+  res.json('Hello world')
 })
 
 app.get('/questions', function(req, res) {
