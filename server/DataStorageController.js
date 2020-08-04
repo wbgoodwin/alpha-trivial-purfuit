@@ -96,9 +96,11 @@ function handleEmptyDBError () {
 }
 
 // Exports --------------------------------------------------------------------
-module.exports.readAQuestion = async function () {
-	const questionList = await getQuestions()
-	return questionList[Math.floor(Math.random() * questionList.length)]
+module.exports.readAQuestion = async function (categoryID) {
+	const allQuestions = await getQuestions()
+	const filteredQuestions = allQuestions.filter(q => q.category_id.toString() === categoryID)
+
+	return filteredQuestions[Math.floor(Math.random() * filteredQuestions.length)]
 }
 
 module.exports.updateCategories = async function(categories) {
