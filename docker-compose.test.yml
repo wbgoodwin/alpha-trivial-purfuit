@@ -21,3 +21,12 @@ services:
     command: ./wait_for_it.sh database:3306 -- ./init.test.sh
     depends_on:
       - database
+  client:
+    build:
+      context: ./client
+      dockerfile: test.Dockerfile
+    ports:
+      - 3000:3000
+    links:
+      - server
+    command: ./wait_for_it.sh server:3001 -- npm run test
