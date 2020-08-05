@@ -174,6 +174,11 @@ class GameBoard extends Component {
           <Modal
             open={this.state.showPlayerSetupModal}
             onClose={this.handleGameStartSubmit}
+            disableAutoFocus
+            disablePortal
+            disableEnforceFocus
+            disableBackdropClick
+            disableEscapeKeyDown
             aria-labelledby="simple-modal-title"
             aria-describedby="simple-modal-description"
           >
