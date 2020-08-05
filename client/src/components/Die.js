@@ -16,7 +16,7 @@ const Die = () => {
      */
     const generateNumber = () => {
         setRolledValue(Math.floor(Math.random() * (6)) + 1)
-        updateDieState(false)
+        //updateDieState(false)
     }
 
     return (

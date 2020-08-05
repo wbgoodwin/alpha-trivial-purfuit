@@ -70,5 +70,18 @@ export async function getCategories() {
 	})
 	.catch(err => console.log(err))
 
-	return categories
+  return categories
+}
+
+export async function retrieveQuestionAnswersSet(categoryName) {
+  let question = {}
+
+  await fetch(`${process.env.REACT_APP_SERVER_HOST}/getRandomQuestionByCategory/${categoryName}`)
+    .then(response => response.json())
+    .then(data => {
+      question = data
+    })
+    .catch(err => console.log(err))
+
+  return question
 }
