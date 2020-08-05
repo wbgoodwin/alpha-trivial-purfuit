@@ -3,7 +3,8 @@ import { Stage, Layer } from 'react-konva';
 import BoardSquare from './BoardSquare'
 import Player from '../Player'
 import Die from '../Die'
-import { setPlayers } from '../../controllers/GameLogicController'
+import GameQuestions from '../GameQuestions'
+import { setPlayers, getCategories } from '../../controllers/GameLogicController'
 import './GameBoard.css'
 import { categories } from '../../controllers/AdminModuleController';
 import { Modal, Checkbox, Button, TextField, MenuItem } from '@material-ui/core'
@@ -13,6 +14,7 @@ class GameBoard extends Component {
         super(props)
         this.state = {
             categories: [],
+            categoryNames: [],
             showPlayerSetupModal: true,
 
             player1Color: "",
@@ -39,10 +41,11 @@ class GameBoard extends Component {
     }
 
     async componentDidMount() {
+      let categoriesRetrieved = await categories();
         this.setState({
-          categories: await categories()
+          categories: categoriesRetrieved,
+          categoryNames: categoriesRetrieved.map(cats => ({name: cats.getName(), color: cats.getColor()}))
         })
-
     }
 
     gameSetUpModal = () => {
@@ -153,7 +156,7 @@ class GameBoard extends Component {
     }
 
 
-    handleGameStartSubmit = () => {
+    handleGameStartSubmit = async () => {
       this.setState({showPlayerSetupModal: false})
 
       let players = [new Player(this.state.player1Name, this.state.player1Color), new Player(this.state.player2Name, this.state.player2Color)];
@@ -186,6 +189,8 @@ class GameBoard extends Component {
           </Modal>
           <div className="column left">
             <Die />
+            <br/>
+            <GameQuestions categories={this.state.categoryNames}/>
           </div>
           <div id="board" className="column right">
           <Stage width={window.innerWidth} height={window.innerHeight}>
