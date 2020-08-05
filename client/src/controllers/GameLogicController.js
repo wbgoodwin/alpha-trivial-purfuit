@@ -1,3 +1,17 @@
+let playerList = [];
+
+let currentPlayer = null;
+
+export function setCurrentPlayer(player) {
+  currentPlayer = player;
+}
+
+export function setPlayers(players) {
+  playerList = players;
+  console.log(players);
+}
+
+
 export async function getQuestion(categoryID) {
   let question = {}
 

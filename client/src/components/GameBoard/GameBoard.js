@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Stage, Layer } from 'react-konva';
 import BoardSquare from './BoardSquare'
+import Player from '../Player'
 import Die from '../Die'
+import { setPlayers } from '../../controllers/GameLogicController'
 import './GameBoard.css'
 import { categories } from '../../controllers/AdminModuleController';
 import { Modal, Checkbox, Button, TextField, MenuItem } from '@material-ui/core'
@@ -13,15 +15,15 @@ class GameBoard extends Component {
             categories: [],
             showPlayerSetupModal: true,
 
-            player1Color: null,
-            player2Color: null,
-            player3Color: null,
-            player4Color: null,
+            player1Color: "",
+            player2Color: "",
+            player3Color: "",
+            player4Color: "",
 
-            player1Name: null,
-            player2Name: null,
-            player3Name: null,
-            player4Name: null,
+            player1Name: "",
+            player2Name: "",
+            player3Name: "",
+            player4Name: "",
 
             player1IsPlaying: true,
             player2IsPlaying: true,
@@ -51,7 +53,11 @@ class GameBoard extends Component {
           <form noValidate autoComplete="off">
             <div>
             <Checkbox disabled checked inputProps={{ 'aria-label': 'disabled checked checkbox' }} /> &nbsp;
-            <TextField id="standard-basic" label="Player Name" />&nbsp;&nbsp;&nbsp;
+            <TextField 
+            id="standard-basic" 
+            value={this.state.player1Name} 
+            onChange={(event) => this.setState({player1Name: event.target.value})} 
+            label="Player Name" />&nbsp;&nbsp;&nbsp;
             <TextField
               id="player1-color-select"
               select
@@ -70,7 +76,11 @@ class GameBoard extends Component {
             </div>
             <div>
             <Checkbox disabled checked inputProps={{ 'aria-label': 'disabled checked checkbox' }} />&nbsp;
-            <TextField id="standard-basic" label="Player Name" />&nbsp;&nbsp;&nbsp;
+            <TextField 
+            id="standard-basic" 
+            value={this.state.player2Name} 
+            onChange={(event) => this.setState({player2Name: event.target.value})} 
+            label="Player Name" />&nbsp;&nbsp;&nbsp;
             <TextField
               id="player2-color-select"
               select
@@ -89,7 +99,11 @@ class GameBoard extends Component {
             </div>
             <div>
             <Checkbox checked={this.state.player3IsPlaying} onChange={() => this.setState({player3IsPlaying: !this.state.player3IsPlaying})}inputProps={{ 'aria-label': 'disabled checked checkbox' }} />&nbsp;
-            <TextField id="standard-basic" label="Player Name" />&nbsp;&nbsp;&nbsp;
+            <TextField 
+            id="standard-basic" 
+            value={this.state.player3Name} 
+            onChange={(event) => this.setState({player3Name: event.target.value})} 
+            label="Player Name" />&nbsp;&nbsp;&nbsp;
             <TextField
               id="player3-color-select"
               select
@@ -108,7 +122,11 @@ class GameBoard extends Component {
             </div>
             <div>
             <Checkbox checked={this.state.player4IsPlaying} onChange={() => this.setState({player4IsPlaying: !this.state.player4IsPlaying})} inputProps={{ 'aria-label': 'disabled checked checkbox' }} />&nbsp;
-            <TextField id="standard-basic" label="Player Name" />&nbsp;&nbsp;&nbsp;
+            <TextField 
+            id="standard-basic" 
+            value={this.state.player4Name} 
+            onChange={(event) => this.setState({player4Name: event.target.value})} 
+            label="Player Name" />&nbsp;&nbsp;&nbsp;
             <TextField
               id="player4-color-select"
               select
@@ -137,6 +155,16 @@ class GameBoard extends Component {
 
     handleGameStartSubmit = () => {
       this.setState({showPlayerSetupModal: false})
+
+      let players = [new Player(this.state.player1Name, this.state.player1Color), new Player(this.state.player2Name, this.state.player2Color)];
+      if (this.state.player3IsPlaying === true) {
+        players.push(new Player(this.state.player3Name, this.state.player3Color))
+      }
+      if (this.state.player4IsPlaying === true) {
+        players.push(new Player(this.state.player4Name, this.state.player4Color))
+      }
+
+      setPlayers(players)
     }
 
 
