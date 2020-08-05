@@ -6,16 +6,20 @@ export default class GameLogicController {
 
 	setCurrentPlayer(player) {
 		this.currentPlayer = player;
-	}
+  }
+  
+  getCurrentPlayer = () => {
+    return this.currentPlayer;
+  }
 
 	constructor(categories, colors, names) {
-		this.playerList = [new Player(categories, colors[0], names[0]),
-			new Player(categories, colors[1], names[1]),
-			new Player(categories, colors[2], names[2]),
-			new Player(categories, colors[3], names[3])];
-		this.setCurrentPlayer(this.playerList[0]);
-	}
-	
+		this.playerList = [new Player(categories, colors[0], names[0], 0),
+			new Player(categories, colors[1], names[1], 60),
+			new Player(categories, colors[2], names[2], 120),
+			new Player(categories, colors[3], names[3], 180)];
+    this.setCurrentPlayer(this.playerList[0]);
+  }
+  	
 	getNextPlayer() {
 		if(this.currentPlayer === this.playerList[0])
 			return this.playerList[1];
@@ -31,7 +35,16 @@ export default class GameLogicController {
 	
 	updateTokenLocation(x,y) {
 		this.currentPlayer.updateTokenLocation(x,y);
-	}
+  }
+  
+  getAllPlayers = () => {
+    return this.playerList.map(player => {
+      if (player.name !== ""){
+        return player
+      }
+    })
+  }
+
 }
 
 export async function getQuestion(categoryID) {

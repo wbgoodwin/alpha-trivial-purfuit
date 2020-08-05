@@ -1,10 +1,15 @@
 import Token from './Token'
+import React from 'react'
 
 export default class Player {
-    constructor(categories, color, name) {
+    constructor(categories, color, name, startPosition) {
 		this.playerName = name;
-		this.token = new Token( categories, color );
-    }
+		this.token = <Token key={startPosition} startPosition={startPosition} categories={categories} color={color} />;
+	}
+	
+	getToken() {
+		return this.token;
+	}
 	
 	updateTokenLocation(x,y) {
 		this.token.updateLocation(x,y);

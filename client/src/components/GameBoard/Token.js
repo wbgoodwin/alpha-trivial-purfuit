@@ -4,13 +4,15 @@ import Chip from './Chip'
 
 export default class Token extends Component{
 
-	constructor(categories, color) {
-		super();
-		this.color = color;
-        this.listOfChips = [new Chip(categories[0].categoryColor, categories[0].categoryName),
-			new Chip(categories[1].categoryColor, categories[1].categoryName),
-			new Chip(categories[2].categoryColor, categories[2].categoryName),
-			new Chip(categories[3].categoryColor, categories[3].categoryName)];
+	constructor(props) {
+		super(props);
+		this.color = props.color;
+		this.x = props.startPosition;
+		this.y = 20;
+        this.listOfChips = [<Chip x={this.x + 5} y={this.y + 5} tokenColor={props.color} categoryColor={props.categories[0].categoryColor} name={props.categories[0].categoryName} />,
+			<Chip x={this.x + 25} y={this.y + 5} tokenColor={props.color} categoryColor={props.categories[1].categoryColor} name={props.categories[1].categoryName} />,
+			<Chip x={this.x + 25} y={this.y + 25} tokenColor={props.color} categoryColor={props.categories[2].categoryColor} name={props.categories[2].categoryName} />,
+			<Chip x={this.x+ 5} y={this.y + 25} tokenColor={props.color} categoryColor={props.categories[3].categoryColor} name={props.categories[3].categoryName} />];
     }
 	
 	updateChipList(category) {
@@ -61,12 +63,14 @@ export default class Token extends Component{
 	
 	render() {
         return(
-			<Group>
-				<Rect x={this.x} y={this.y} width={50} height={50} fill={"black"}/>
-				<Chip ref="this.listOfChips[0]"/>
-				<Chip ref="this.listOfChips[1]"/>
-				<Chip ref="this.listOfChips[2]"/>
-				<Chip ref="this.listOfChips[3]"/>
+			<Group key={this.color}
+			draggable
+			>
+				<Rect x={this.x} y={this.y} width={50} height={50} fill={this.color}/>
+				{this.listOfChips[0]}
+				{this.listOfChips[1]}
+				{this.listOfChips[2]}
+				{this.listOfChips[3]}
 			</Group>
 		);
 					
