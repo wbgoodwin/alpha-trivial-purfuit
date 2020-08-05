@@ -33,7 +33,7 @@ class GameBoard extends Component {
         }
         this.tokenColors = ["Blue", "Orange", "Green", "Yellow"];
         this.width = window.innerWidth;
-        this.center = (this.width/2) + 150;
+        this.center = (this.width/2) - 400
         this.squareSide = 100;
         this.topOfBoard = 20;
     }
