@@ -4,14 +4,11 @@ import {
   Link,
   Typography,
   Breadcrumbs,
-  Container,
-  Avatar,
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  responsiveFontSizes,
 } from "@material-ui/core";
-import { Link as RRDLink, useRouteMatch } from "react-router-dom";
+import { Link as RRDLink } from "react-router-dom";
 import Nav from "../../components/Nav";
 import teamLogo from "../../pages/Help/images/teamLogo.png";
 import homePage from "../../pages/Help/images/homePage.png";
