@@ -1,5 +1,7 @@
 import Player from '../components/GameBoard/Player'
 
+
+
 export default class GameLogicController {
 
 	setCurrentPlayer(player) {
@@ -31,7 +33,6 @@ export default class GameLogicController {
 		this.currentPlayer.updateTokenLocation(x,y);
 	}
 }
-
 
 export async function getQuestion(categoryID) {
 	let question = {}
