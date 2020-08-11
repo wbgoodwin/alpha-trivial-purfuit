@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Stage, Layer } from 'react-konva';
+import { Stage, Layer, Group } from 'react-konva';
 import BoardSquare from './BoardSquare'
 import Player from '../Player'
 import Die from '../Die'
 import GameQuestions from '../GameQuestions'
 import { setPlayers, getCategories } from '../../controllers/GameLogicController'
+import GameLogicController from '../../controllers/GameLogicController'
 import './GameBoard.css'
 import { categories } from '../../controllers/AdminModuleController';
 import { Modal, Checkbox, Button, TextField, MenuItem } from '@material-ui/core'
@@ -38,6 +39,7 @@ class GameBoard extends Component {
         this.center = (this.width/2) - 400
         this.squareSide = 100;
         this.topOfBoard = 20;
+        this.gameControl = null;
     }
 
     async componentDidMount() {
@@ -158,16 +160,10 @@ class GameBoard extends Component {
 
     handleGameStartSubmit = async () => {
       this.setState({showPlayerSetupModal: false})
+      let playerNames = [this.state.player1Name, this.state.player2Name, this.state.player3Name, this.state.player4Name];
+      let playerColors = [this.state.player1Color, this.state.player2Color, this.state.player3Color, this.state.player4Color]; 
 
-      let players = [new Player(this.state.player1Name, this.state.player1Color), new Player(this.state.player2Name, this.state.player2Color)];
-      if (this.state.player3IsPlaying === true) {
-        players.push(new Player(this.state.player3Name, this.state.player3Color))
-      }
-      if (this.state.player4IsPlaying === true) {
-        players.push(new Player(this.state.player4Name, this.state.player4Color))
-      }
-
-      setPlayers(players)
+      this.gameControl = new GameLogicController(this.state.categories, playerColors, playerNames)
     }
 
 
@@ -193,7 +189,7 @@ class GameBoard extends Component {
             <GameQuestions categories={this.state.categoryNames}/>
           </div>
           <div id="board" className="column right">
-          <Stage width={window.innerWidth} height={window.innerHeight}>
+          <Stage width={1000} height={window.innerHeight}>
               <Layer>
                 <BoardSquare x={this.center - (4 * this.squareSide)} y={this.topOfBoard} category={this.state.categories[0]} />
                 <BoardSquare x={this.center - (3 * this.squareSide)} y={this.topOfBoard} category={this.state.categories[1]}/>
@@ -250,6 +246,9 @@ class GameBoard extends Component {
                 <BoardSquare x={this.center + (3 * this.squareSide)} y={this.topOfBoard + (4 * this.squareSide)} category={this.state.categories[3]}/>
                 
               </Layer>
+              <Layer>
+            {this.gameControl === null ? <Group></Group> : this.gameControl.getAllPlayers().map(player => player.getToken())}
+            </Layer>
             </Stage>
           </div>
       </div>
