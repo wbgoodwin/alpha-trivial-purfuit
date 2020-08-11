@@ -9,6 +9,7 @@ import EditQuestion from './pages/Admin/EditQuestion'
 import ImportQuestions from './pages/Admin/ImportQuestions'
 import Categories from './pages/Admin/Categories'
 import Game from './pages/Game/Game'
+import Help from './pages/Help/Help'
 
 function App() {
   return (
@@ -38,9 +39,17 @@ function App() {
             </>
           )}
         />
+        <Route
+          path="/help"
+          render={({ match: { url } }) => (
+            <>
+              <Route path={`${url}/`} component={Help} exact />
+            </>
+          )}
+        />
       </Switch>
     </BrowserRouter>
-  )
+  );
 }
 
 export default App;
