@@ -46,7 +46,22 @@ class GameBoard extends Component {
       let categoriesRetrieved = await categories();
         this.setState({
           categories: categoriesRetrieved,
-          categoryNames: categoriesRetrieved.map(cats => ({name: cats.getName(), color: cats.getColor()}))
+          categoryNames: categoriesRetrieved.map(cats => {
+            let color = "";
+            if (cats.getColor() === "#F44336") {
+              color = "Red"
+            }
+            else if (cats.getColor() === "#FFFFFF") {
+              color = "White"
+            }
+            else if (cats.getColor() === "#2196F3") {
+              color = "Blue"
+            }
+            else {
+              color = "Green"
+            }
+            return {name: cats.getName(), color: color}
+          })
         })
     }
 

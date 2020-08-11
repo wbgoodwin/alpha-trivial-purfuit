@@ -77,7 +77,7 @@ const Help = () => {
           <Accordion>
             <AccordionSummary>
               <Typography style={accordionHeader}>
-                What Does the Game Look Like?
+                What Does the Application Look Like?
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
