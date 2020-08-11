@@ -24,13 +24,17 @@
         "@testing-library/jest-dom": "5.11.0",
         "babel-jest": "^24.9.0",
         "jest": "24.9.0",
-        "react-test-renderer": "16.13.1"
+        "react-test-renderer": "16.13.1",
+        "whatwg-fetch": "^3.3.1"
     },
     "jest": {
         "moduleNameMapper": {
             "\\.(css|less|sass|scss)$": "<rootDir>/__mocks__/styleMock.js",
             "\\.(gif|ttf|eot|svg)$": "<rootDir>/__mocks__/fileMock.js"
-        }
+        },
+        "setupFiles": [
+          "<rootDir>/setupTests.js"
+        ]
     },
     "scripts": {
         "start": "react-scripts start",
