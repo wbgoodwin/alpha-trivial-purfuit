@@ -1,3 +1,12 @@
+import Category from '../components/Category'
+
+export const categories = async () => {
+  let categories = await getCategories();
+  return [new Category(categories[0].color, categories[0].name), new Category(categories[1].color, categories[1].name),
+   new Category(categories[2].color, categories[2].name), new Category(categories[3].color, categories[3].name)]
+}
+
+
 export async function getCategories() {
   let categories = []
 

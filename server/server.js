@@ -58,6 +58,11 @@ app.get('/readQuestion/:categoryID', async function(req, res) {
   return res.json(data)
 })
 
+app.get('/getRandomQuestionByCategory/:categoryName', async function(req, res) {
+  const data = await DataStorageController.getRandomQuestionByCategory(req.params.categoryName)
+  return res.json(data)
+})
+
 app.post('/updateCategories', function(req, res) {
   DataStorageController.updateCategories(req.body.categories)
   res.json({success: true})
