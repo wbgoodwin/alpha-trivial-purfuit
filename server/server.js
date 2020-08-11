@@ -54,7 +54,12 @@ app.get('/question/:questionID', async function(req, res) {
 })
 
 app.get('/readQuestion/:categoryID', function(req, res) {
-  const data = DataStorageController.readAQuestion()
+  const data = DataStorageController.readAQuestion(req.params.categoryID)
+  return res.json(data)
+})
+
+app.get('/getRandomQuestionByCategory/:categoryName', async function(req, res) {
+  const data = await DataStorageController.getRandomQuestionByCategory(req.params.categoryName)
   return res.json(data)
 })
 

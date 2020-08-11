@@ -79,6 +79,25 @@ function getQuestions () {
 	})
 }
 
+function getQuestionsByCategory(categoryName) {
+	return new Promise(function(resolve, reject) {
+		pool.query(`SELECT questions.question, questions.correct_answer, questions.incorrect_answer1, 
+		questions.incorrect_answer2, questions.incorrect_answer3 FROM questions INNER JOIN 
+		categories ON categories.name = "${categoryName}" AND categories.id = questions.category_id;`, function (err, result, fields) {
+			if (err) {
+				console.error(err)
+				reject(err)
+			}
+			else {
+				return resolve(result)
+			}
+		})
+	})
+
+}
+
+
+
 function handleEmptyDBError () {
 	pool.query("DROP TABLE IF EXISTS questions", function (err, result) {
 		if (err) {
@@ -197,4 +216,9 @@ module.exports.uploadQuestionFile = async function(questions) {
 				if (err) console.error(err)
 			})
 	}
+}
+
+module.exports.getRandomQuestionByCategory = async function(categoryName) {
+	const questionList = await getQuestionsByCategory(categoryName);
+	return questionList[Math.floor(Math.random() * questionList.length)]
 }
