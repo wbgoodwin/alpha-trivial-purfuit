@@ -1,42 +1,53 @@
-import Player from '../components/GameBoard/Player'
-
+import Player from '../classes/Game/Player'
+import Category from '../classes/Game/Category'
 
 
 export default class GameLogicController {
+	constructor(categories, players) {
+		this.categories = categories
+
+		this.playerList = []
+		let position = 0
+
+		for (let p in players) {
+			const player = players[p]
+			this.playerList.push(new Player(categories, player.color, player.name, position))
+
+			position += 60
+		}
+
+		this.setCurrentPlayer(this.playerList[0])
+  }
+
+	getCategories() {
+		return this.categories
+	}
 
 	setCurrentPlayer(player) {
 		this.currentPlayer = player;
   }
-  
-  getCurrentPlayer = () => {
+
+  getCurrentPlayer() {
     return this.currentPlayer;
   }
 
-	constructor(categories, colors, names) {
-		this.playerList = [new Player(categories, colors[0], names[0], 0),
-			new Player(categories, colors[1], names[1], 60),
-			new Player(categories, colors[2], names[2], 120),
-			new Player(categories, colors[3], names[3], 180)];
-    this.setCurrentPlayer(this.playerList[0]);
-  }
-  	
 	getNextPlayer() {
 		if(this.currentPlayer === this.playerList[0])
 			return this.playerList[1];
-		
+
 		if(this.currentPlayer === this.playerList[1])
 			return this.playerList[2];
-		
+
 		if(this.currentPlayer === this.playerList[2])
 			return this.playerList[3];
-		
+
 		return this.playerList[0];
 	}
-	
+
 	updateTokenLocation(x,y) {
 		this.currentPlayer.updateTokenLocation(x,y);
   }
-  
+
   getAllPlayers = () => {
     return this.playerList.map(player => {
       if (player.name !== ""){
@@ -71,6 +82,12 @@ export async function getCategories() {
 	.catch(err => console.log(err))
 
   return categories
+}
+
+export const retrieveCategories = async () => {
+  let categories = await getCategories();
+
+	return categories.map(c => new Category(c.id, c.color, c.name))
 }
 
 export async function retrieveQuestionAnswersSet(categoryName) {
