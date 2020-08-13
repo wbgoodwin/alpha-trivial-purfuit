@@ -58,10 +58,10 @@ class GameBoard extends Component {
           <form noValidate autoComplete="off">
             <div>
             <Checkbox disabled checked inputProps={{ 'aria-label': 'disabled checked checkbox' }} /> &nbsp;
-            <TextField 
-            id="standard-basic" 
-            value={this.state.player1Name} 
-            onChange={(event) => this.setState({player1Name: event.target.value})} 
+            <TextField
+            id="standard-basic"
+            value={this.state.player1Name}
+            onChange={(event) => this.setState({player1Name: event.target.value})}
             label="Player Name" />&nbsp;&nbsp;&nbsp;
             <TextField
               id="player1-color-select"
@@ -81,10 +81,10 @@ class GameBoard extends Component {
             </div>
             <div>
             <Checkbox disabled checked inputProps={{ 'aria-label': 'disabled checked checkbox' }} />&nbsp;
-            <TextField 
-            id="standard-basic" 
-            value={this.state.player2Name} 
-            onChange={(event) => this.setState({player2Name: event.target.value})} 
+            <TextField
+            id="standard-basic"
+            value={this.state.player2Name}
+            onChange={(event) => this.setState({player2Name: event.target.value})}
             label="Player Name" />&nbsp;&nbsp;&nbsp;
             <TextField
               id="player2-color-select"
@@ -104,10 +104,10 @@ class GameBoard extends Component {
             </div>
             <div>
             <Checkbox checked={this.state.player3IsPlaying} onChange={() => this.setState({player3IsPlaying: !this.state.player3IsPlaying})}inputProps={{ 'aria-label': 'disabled checked checkbox' }} />&nbsp;
-            <TextField 
-            id="standard-basic" 
-            value={this.state.player3Name} 
-            onChange={(event) => this.setState({player3Name: event.target.value})} 
+            <TextField
+            id="standard-basic"
+            value={this.state.player3Name}
+            onChange={(event) => this.setState({player3Name: event.target.value})}
             label="Player Name" />&nbsp;&nbsp;&nbsp;
             <TextField
               id="player3-color-select"
@@ -127,10 +127,10 @@ class GameBoard extends Component {
             </div>
             <div>
             <Checkbox checked={this.state.player4IsPlaying} onChange={() => this.setState({player4IsPlaying: !this.state.player4IsPlaying})} inputProps={{ 'aria-label': 'disabled checked checkbox' }} />&nbsp;
-            <TextField 
-            id="standard-basic" 
-            value={this.state.player4Name} 
-            onChange={(event) => this.setState({player4Name: event.target.value})} 
+            <TextField
+            id="standard-basic"
+            value={this.state.player4Name}
+            onChange={(event) => this.setState({player4Name: event.target.value})}
             label="Player Name" />&nbsp;&nbsp;&nbsp;
             <TextField
               id="player4-color-select"
@@ -161,7 +161,7 @@ class GameBoard extends Component {
     handleGameStartSubmit = async () => {
       this.setState({showPlayerSetupModal: false})
       let playerNames = [this.state.player1Name, this.state.player2Name, this.state.player3Name, this.state.player4Name];
-      let playerColors = [this.state.player1Color, this.state.player2Color, this.state.player3Color, this.state.player4Color]; 
+      let playerColors = [this.state.player1Color, this.state.player2Color, this.state.player3Color, this.state.player4Color];
 
       this.gameControl = new GameLogicController(this.state.categories, playerColors, playerNames)
     }
@@ -186,7 +186,7 @@ class GameBoard extends Component {
           <div className="column left">
             <Die />
             <br/>
-            <GameQuestions categories={this.state.categoryNames}/>
+            <GameQuestions categories={this.state.categories}/>
           </div>
           <div id="board" className="column right">
           <Stage width={1000} height={window.innerHeight}>
@@ -244,7 +244,7 @@ class GameBoard extends Component {
                 <BoardSquare x={this.center + (this.squareSide)} y={this.topOfBoard + (4 * this.squareSide)} category={this.state.categories[1]}/>
                 <BoardSquare x={this.center + (2 * this.squareSide)} y={this.topOfBoard + (4 * this.squareSide)} category={this.state.categories[2]}/>
                 <BoardSquare x={this.center + (3 * this.squareSide)} y={this.topOfBoard + (4 * this.squareSide)} category={this.state.categories[3]}/>
-                
+
               </Layer>
               <Layer>
             {this.gameControl === null ? <Group></Group> : this.gameControl.getAllPlayers().map(player => player.getToken())}
@@ -255,7 +255,7 @@ class GameBoard extends Component {
     )
   }
 
-    
+
 }
 
 export default GameBoard

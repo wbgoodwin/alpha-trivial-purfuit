@@ -1,7 +1,8 @@
 export default class Category {
-    constructor(color, name) {
-        this.categoryColor = color;
-        this.categoryName = name;
+    constructor(id, color, name) {
+      this.id = id
+      this.categoryColor = color;
+      this.categoryName = name;
     }
 
     updateCategoryColor = (color) => {
@@ -10,6 +11,10 @@ export default class Category {
 
     updateCategoryName = (name) => {
         this.categoryName = name;
+    }
+
+    getId = () => {
+      return this.id
     }
 
     getColor = () => {

@@ -7,7 +7,7 @@ export default class GameLogicController {
 	setCurrentPlayer(player) {
 		this.currentPlayer = player;
   }
-  
+
   getCurrentPlayer = () => {
     return this.currentPlayer;
   }
@@ -19,24 +19,24 @@ export default class GameLogicController {
 			new Player(categories, colors[3], names[3], 180)];
     this.setCurrentPlayer(this.playerList[0]);
   }
-  	
+
 	getNextPlayer() {
 		if(this.currentPlayer === this.playerList[0])
 			return this.playerList[1];
-		
+
 		if(this.currentPlayer === this.playerList[1])
 			return this.playerList[2];
-		
+
 		if(this.currentPlayer === this.playerList[2])
 			return this.playerList[3];
-		
+
 		return this.playerList[0];
 	}
-	
+
 	updateTokenLocation(x,y) {
 		this.currentPlayer.updateTokenLocation(x,y);
   }
-  
+
   getAllPlayers = () => {
     return this.playerList.map(player => {
       if (player.name !== ""){
@@ -71,17 +71,4 @@ export async function getCategories() {
 	.catch(err => console.log(err))
 
   return categories
-}
-
-export async function retrieveQuestionAnswersSet(categoryName) {
-  let question = {}
-
-  await fetch(`${process.env.REACT_APP_SERVER_HOST}/getRandomQuestionByCategory/${categoryName}`)
-    .then(response => response.json())
-    .then(data => {
-      question = data
-    })
-    .catch(err => console.log(err))
-
-  return question
 }
