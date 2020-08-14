@@ -7,6 +7,7 @@ import GameLogicController from '../../controllers/GameLogicController'
 import './GameBoard.css'
 import { retrieveCategories } from '../../controllers/GameLogicController'
 import GameSettings from './GameSettings'
+import PlayerList from './PlayerList';
 
 class GameBoard extends Component {
   constructor(props) {
@@ -59,6 +60,8 @@ class GameBoard extends Component {
       return (
         <div className="row">
           <div className="column left">
+            <PlayerList gameController={this.state.gameControl} />
+            <br/>
             <Die />
             <br/>
             <GameQuestions categories={this.state.categories}/>
