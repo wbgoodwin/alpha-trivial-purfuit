@@ -3,18 +3,17 @@ import {
     CardContent, CardHeader, Grid, Button, TextField, Paper, Select, MenuItem,
     InputLabel, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio
   } from '@material-ui/core'
-import { retrieveQuestionAnswersSet } from '../controllers/GameLogicController'
+import { retrieveQuestionAnswersSet } from '../../controllers/GameLogicController'
 
 const GameQuestions = (props) => {
-
     const [category, setCategory] = useState("")
     const [question, setQuestion] = useState({})
     const [usersAnswer, setUsersAnswer] = useState("")
     const [answerIsCorrect, setAnswerIsCorrect] = useState(false)
     const [questionAnswered, setQuestionAnswered] = useState(false)
-    
 
-    const getQuestionToShow = async (categoryName) => { 
+
+    const getQuestionToShow = async (categoryName) => {
         let questionAnswersSet = await retrieveQuestionAnswersSet(categoryName);
         setQuestion(questionAnswersSet);
         setQuestionAnswered(false)
@@ -57,9 +56,9 @@ const GameQuestions = (props) => {
                             onChange={(e) => setCategory(e.target.value)}
                             style={{'minWidth': '20vw'}}
                         >
-                            {props.categories === undefined ? null : props.categories.map(cat => 
-                                <MenuItem key={cat.name} value={cat.name}>
-                                {cat.name + " (" + cat.color + ")"}
+                            {props.categories === undefined ? null : props.categories.map((cat, index) =>
+                                <MenuItem key={index} value={cat.getName()}>
+                                {cat.getName() + " (" + cat.getColorName() + ")"}
                                 </MenuItem>
                                 )}
                         </Select>
@@ -75,10 +74,10 @@ const GameQuestions = (props) => {
                             Get New Question
                         </Button>
                     </Grid>
-                    
+
                     {Object.keys(question).length === 0 && question.constructor === Object ?
                         null
-                    : 
+                    :
                         <div>
                             <br/>
                             <Grid item>
@@ -93,7 +92,7 @@ const GameQuestions = (props) => {
                                 </FormControl>
                             </Grid>
                             <div>
-                                {questionAnswered ? 
+                                {questionAnswered ?
                                     userInstructions()
                                  :
                                 <Button
@@ -105,9 +104,9 @@ const GameQuestions = (props) => {
                                     Check Answer
                                 </Button>
                                 }
-                            
+
                             </div>
-                            
+
                         </div>
                     }
 

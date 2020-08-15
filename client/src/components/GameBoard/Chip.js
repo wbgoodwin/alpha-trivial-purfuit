@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import { Rect } from 'react-konva';
-import Category from '../Category'
+import Category from '../../classes/Game/Category'
 
 export default class Chip extends Component {
     constructor(props) {
 		super(props);
         this.isTaken = false;
         this.category = new Category(arguments);
-        
+
         this.state = {
             color: props.tokenColor
         }
@@ -21,11 +21,11 @@ export default class Chip extends Component {
             this.setState({color: this.props.tokenColor})
         }
     }
-	
+
 	setAvailability() {
 		this.isTaken = true;
 	}
-	
+
 	render() {
         return  (<Rect
                         onDblClick={() => this.chipColorFlipped()}
