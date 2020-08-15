@@ -16,6 +16,7 @@ export default class GameLogicController {
 			position += 60
 		}
 
+		this.playerList = this.shufflePlayers(this.playerList);
 		this.setCurrentPlayer(this.playerList[0])
   }
 
@@ -54,6 +55,25 @@ export default class GameLogicController {
         return player
       }
     })
+  }
+
+  shufflePlayers = (array) => {
+	let currentIndex = array.length, temporaryValue, randomIndex;
+  
+	// While there remain elements to shuffle...
+	while (0 !== currentIndex) {
+  
+	  // Pick a remaining element...
+	  randomIndex = Math.floor(Math.random() * currentIndex);
+	  currentIndex -= 1;
+  
+	  // And swap it with the current element.
+	  temporaryValue = array[currentIndex];
+	  array[currentIndex] = array[randomIndex];
+	  array[randomIndex] = temporaryValue;
+	}
+  
+	return array;
   }
 
 }
