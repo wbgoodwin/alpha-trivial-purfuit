@@ -3,7 +3,7 @@ import {
     CardContent, CardHeader, Grid, Button, Paper, Select, MenuItem,
     InputLabel, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio
   } from '@material-ui/core'
-import { retrieveQuestionAnswersSet } from '../../controllers/GameLogicController'
+import { getQuestion } from '../../controllers/GameLogicController'
 
 const GameQuestions = (props) => {
     const [category, setCategory] = useState("")
@@ -33,7 +33,8 @@ const GameQuestions = (props) => {
     }
 
     const getQuestionToShow = async (categoryName) => {
-      let questionAnswersSet = await retrieveQuestionAnswersSet(categoryName);
+      const category = props.categories.find(c => c.getName() === categoryName)
+      let questionAnswersSet = await getQuestion(category.getId());
       setQuestion(questionAnswersSet);
       setQuestionAnswered(false)
       setUsersAnswer("")

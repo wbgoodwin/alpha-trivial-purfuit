@@ -79,25 +79,6 @@ function getQuestions () {
 	})
 }
 
-function getQuestionsByCategory(categoryName) {
-	return new Promise(function(resolve, reject) {
-		pool.query(`SELECT questions.question, questions.correct_answer, questions.incorrect_answer1, 
-		questions.incorrect_answer2, questions.incorrect_answer3 FROM questions INNER JOIN 
-		categories ON categories.name = "${categoryName}" AND categories.id = questions.category_id;`, function (err, result, fields) {
-			if (err) {
-				console.error(err)
-				reject(err)
-			}
-			else {
-				return resolve(result)
-			}
-		})
-	})
-
-}
-
-
-
 function handleEmptyDBError () {
 	pool.query("DROP TABLE IF EXISTS questions", function (err, result) {
 		if (err) {
@@ -114,12 +95,33 @@ function handleEmptyDBError () {
 	sqldumpImporter()
 }
 
+let ASKED_QUESTIONS = {
+	1: [],
+	2: [],
+	3: [],
+	4: []
+}
+
 // Exports --------------------------------------------------------------------
 module.exports.readAQuestion = async function (categoryID) {
 	const allQuestions = await getQuestions()
-	const filteredQuestions = allQuestions.filter(q => q.category_id.toString() === categoryID)
+	const filteredQuestions = allQuestions.filter(
+		q => q.category_id.toString() === categoryID && !ASKED_QUESTIONS[categoryID].includes(q.id)
+	)
 
-	return filteredQuestions[Math.floor(Math.random() * filteredQuestions.length)]
+	question = filteredQuestions[Math.floor(Math.random() * filteredQuestions.length)]
+
+	// No questions left, reset category
+	if (!question) {
+		const id = ASKED_QUESTIONS[categoryID][Math.floor(Math.random() * ASKED_QUESTIONS[categoryID].length)]
+		question = allQuestions.find(q => q.id == id)
+
+		ASKED_QUESTIONS[categoryID] = []
+	}
+
+	ASKED_QUESTIONS[categoryID].push(question.id)
+
+	return question
 }
 
 module.exports.updateCategories = async function(categories) {
@@ -218,9 +220,4 @@ module.exports.uploadQuestionFile = async function(questions) {
 				if (err) console.error(err)
 			})
 	}
-}
-
-module.exports.getRandomQuestionByCategory = async function(categoryName) {
-	const questionList = await getQuestionsByCategory(categoryName);
-	return questionList[Math.floor(Math.random() * questionList.length)]
 }
