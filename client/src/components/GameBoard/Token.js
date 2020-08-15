@@ -14,7 +14,7 @@ export default class Token extends Component{
 			<Chip x={this.x + 25} y={this.y + 25} tokenColor={props.color} categoryColor={props.categories[2].categoryColor} name={props.categories[2].categoryName} />,
 			<Chip x={this.x+ 5} y={this.y + 25} tokenColor={props.color} categoryColor={props.categories[3].categoryColor} name={props.categories[3].categoryName} />];
     }
-	
+
 	updateChipList(category) {
 		this.listOfChips.forEach(function(element) {
 			if(element.category.categoryName === category)
@@ -23,7 +23,7 @@ export default class Token extends Component{
 			}
 		});
 	}
-	
+
 	checkChip(category) {
 		this.listOfChips.forEach(function(element) {
 			if(element.category.categoryName === category)
@@ -32,7 +32,7 @@ export default class Token extends Component{
 			}
 		});
 	}
-	
+
 	isFull() {
 		this.listOfChips.forEach(function(element) {
 			if(element.isTaken === false)
@@ -40,14 +40,14 @@ export default class Token extends Component{
 				return false;
 			}
 		});
-		
+
 		return true;
 	}
-	
+
 	getChipList() {
 		return this.listOfChips;
 	}
-	
+
 	updateLocation(x,y) {
 		this.x = x;
 		this.y = y;
@@ -60,7 +60,7 @@ export default class Token extends Component{
 		this.listOfChips[3].x = x + 13;
 		this.listOfChips[3].y = y + 13;
 	}
-	
+
 	render() {
         return(
 			<Group key={this.color}
@@ -73,6 +73,6 @@ export default class Token extends Component{
 				{this.listOfChips[3]}
 			</Group>
 		);
-					
+
     }
 }
