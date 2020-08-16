@@ -20,11 +20,9 @@ class GameBoard extends Component {
     }
 
     this.width = window.innerWidth;
-    this.center = (this.width/2) - 400
-    console.log(this.width)
-    console.log(this.center)
+    this.center = (this.width * 0.4) - 400
     this.squareSide = 100;
-    this.topOfBoard = 20;
+    this.topOfBoard = 0;
 
     this.handleGameStartSubmit = this.handleGameStartSubmit.bind(this)
     this.getCategoryNames = this.getCategoryNames.bind(this)
@@ -39,7 +37,7 @@ class GameBoard extends Component {
   }
 
   handleGameStartSubmit(players) {
-    const gameControl = new GameLogicController(this.state.categories, players)
+    const gameControl = new GameLogicController(this.state.categories, players, this.center)
 
     this.setState({
       showPlayerSetupModal: false,
@@ -69,7 +67,7 @@ class GameBoard extends Component {
             <GameQuestions categories={this.state.categories}/>
           </div>
           <div id="board" className="column right">
-            <Stage width={1000} height={window.innerHeight}>
+            <Stage width={1500} height={900}>
               <Layer>
                 <BoardSquare x={this.center - (4 * this.squareSide)} y={this.topOfBoard} category={this.state.categories[0]} />
                 <BoardSquare x={this.center - (3 * this.squareSide)} y={this.topOfBoard} category={this.state.categories[1]}/>

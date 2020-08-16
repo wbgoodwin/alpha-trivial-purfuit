@@ -3,12 +3,12 @@ import Category from '../classes/Game/Category'
 
 
 export default class GameLogicController {
-	constructor(categories, players) {
+	constructor(categories, players, boardCenter) {
 		this.categories = categories
 
 		this.playerList = []
-		let xStartPosition = (window.innerWidth / 2 - 400)
-		let yStartPosition = 420
+		let xStartPosition = boardCenter
+		let yStartPosition = 400
 		let xposition = xStartPosition
 		let yposition = yStartPosition
 
