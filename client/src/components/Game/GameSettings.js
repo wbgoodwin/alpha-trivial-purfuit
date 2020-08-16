@@ -5,7 +5,6 @@ import {
 } from '@material-ui/core'
 import { colorMapping } from '../../colors'
 
-
 class GameSettings extends React.Component {
   constructor(props) {
     super(props)
