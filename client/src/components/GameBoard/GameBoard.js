@@ -21,6 +21,8 @@ class GameBoard extends Component {
 
     this.width = window.innerWidth;
     this.center = (this.width/2) - 400
+    console.log(this.width)
+    console.log(this.center)
     this.squareSide = 100;
     this.topOfBoard = 20;
 
@@ -122,6 +124,7 @@ class GameBoard extends Component {
                 <BoardSquare x={this.center + (this.squareSide)} y={this.topOfBoard + (4 * this.squareSide)} category={this.state.categories[1]}/>
                 <BoardSquare x={this.center + (2 * this.squareSide)} y={this.topOfBoard + (4 * this.squareSide)} category={this.state.categories[2]}/>
                 <BoardSquare x={this.center + (3 * this.squareSide)} y={this.topOfBoard + (4 * this.squareSide)} category={this.state.categories[3]}/>
+
               </Layer>
               <Layer>
                 {this.gameControl === null ? <Group></Group> : this.state.gameControl.getAllPlayers().map(player => player.getToken())}

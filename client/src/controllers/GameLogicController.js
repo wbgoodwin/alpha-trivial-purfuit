@@ -7,13 +7,21 @@ export default class GameLogicController {
 		this.categories = categories
 
 		this.playerList = []
-		let position = 0
+		let xStartPosition = (window.innerWidth / 2 - 400)
+		let yStartPosition = 420
+		let xposition = xStartPosition
+		let yposition = yStartPosition
 
 		for (let p in players) {
 			const player = players[p]
-			this.playerList.push(new Player(categories, player.color, player.name, position))
-
-			position += 60
+			this.playerList.push(new Player(categories, player.color, player.name, xposition, yposition))
+			if (xposition - xStartPosition < 50){
+				xposition += 50
+			}
+			else{
+				xposition = xStartPosition
+				yposition += 50
+			}
 		}
 
 		this.playerList = this.shufflePlayers(this.playerList);
