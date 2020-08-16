@@ -4,6 +4,7 @@ import {
     InputLabel, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio
   } from '@material-ui/core'
 import { getQuestion } from '../../controllers/GameLogicController'
+import { shuffle } from '../../utils/shuffle'
 
 const GameQuestions = (props) => {
     const [category, setCategory] = useState("")
@@ -20,17 +21,6 @@ const GameQuestions = (props) => {
         setShuffledAnswers(shuffle(answers))
       }
     }, [question])
-
-    const shuffle = (a) => {
-        var j, x, i
-        for (i = a.length - 1; i > 0; i--) {
-            j = Math.floor(Math.random() * (i + 1))
-            x = a[i]
-            a[i] = a[j]
-            a[j] = x
-        }
-        return a
-    }
 
     const getQuestionToShow = async (categoryName) => {
       const category = props.categories.find(c => c.getName() === categoryName)

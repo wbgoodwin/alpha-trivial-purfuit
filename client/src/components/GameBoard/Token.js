@@ -7,7 +7,7 @@ export default class Token extends Component{
 	constructor(props) {
 		super(props);
 		this.color = props.color;
-		this.x = props.startPosition;
+		this.x = props.startPosition + 10;
 		this.y = 20;
         this.listOfChips = [<Chip x={this.x + 5} y={this.y + 5} tokenColor={props.color} categoryColor={props.categories[0].categoryColor} name={props.categories[0].categoryName} />,
 			<Chip x={this.x + 25} y={this.y + 5} tokenColor={props.color} categoryColor={props.categories[1].categoryColor} name={props.categories[1].categoryName} />,

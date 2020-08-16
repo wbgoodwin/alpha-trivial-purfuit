@@ -19,29 +19,29 @@ class BoardSquare extends Component {
                     <Rect
                         x={this.props.x}
                         y={this.props.y}
-                        width={50}
-                        height={50}
+                        width={25}
+                        height={25}
                         fill={this.props.category[0] === undefined ? "white" : this.props.category[0].getColor() }
                     />
                     <Rect
                         x={this.props.x}
-                        y={this.props.y + 50}
-                        width={50}
-                        height={50}
+                        y={this.props.y + 25}
+                        width={25}
+                        height={25}
                         fill={this.props.category[1] === undefined ? "white" : this.props.category[1].getColor() }
                     />
                     <Rect
-                        x={this.props.x + 50}
+                        x={this.props.x + 25}
                         y={this.props.y}
-                        width={50}
-                        height={50}
+                        width={25}
+                        height={25}
                         fill={this.props.category[2] === undefined ? "white" : this.props.category[2].getColor() }
                     />
                     <Rect
-                        x={this.props.x + 50}
-                        y={this.props.y + 50}
-                        width={50}
-                        height={50}
+                        x={this.props.x + 25}
+                        y={this.props.y + 25}
+                        width={25}
+                        height={25}
                         fill={this.props.category[3] === undefined ? "white" : this.props.category[3].getColor() }
                     />
                 </Group>
@@ -53,12 +53,12 @@ class BoardSquare extends Component {
                     <Rect
                         x={this.props.x}
                         y={this.props.y}
-                        width={100}
-                        height={100}
+                        width={50}
+                        height={50}
                         fill="grey"
                         stroke="black"
                     />
-                    <Text x={this.props.x + 15} y={this.props.y + 45} text="Roll Again" fontSize={15} />                
+                    <Text x={this.props.x + 2} y={this.props.y + 20} text="Roll Again" fontSize={10} />
                 </Group>
             )
         }
@@ -68,12 +68,12 @@ class BoardSquare extends Component {
                     <Rect
                         x={this.props.x}
                         y={this.props.y}
-                        width={100}
-                        height={100}
+                        width={50}
+                        height={50}
                         fill="grey"
                         stroke="black"
                     />
-                    <Circle x={this.props.x + 50} y={this.props.y + 50} radius={50} fill={this.props.category === undefined ? "grey" : this.props.category.getColor() } />
+                    <Circle x={this.props.x + 25} y={this.props.y + 25} radius={25} fill={this.props.category === undefined ? "grey" : this.props.category.getColor() } />
                 </Group>
             )
         }
@@ -81,14 +81,14 @@ class BoardSquare extends Component {
             return (<Rect
                 x={this.props.x}
                 y={this.props.y}
-                width={100}
-                height={100}
+                width={50}
+                height={50}
                 fill={this.props.category === undefined ? "white" : this.props.category.getColor() }
                 stroke="black"
             />)
         }
     }
-    
+
 
     render() {
         return this.getBoardSquare()
