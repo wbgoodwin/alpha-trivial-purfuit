@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Rect, Group } from 'react-konva';
 import Chip from './Chip'
+import './GameBoard.css'
 
 export default class Token extends Component{
 
@@ -13,7 +14,11 @@ export default class Token extends Component{
 			<Chip x={this.x + 25} y={this.y + 5} tokenColor={props.color} categoryColor={props.categories[1].categoryColor} name={props.categories[1].categoryName} />,
 			<Chip x={this.x + 25} y={this.y + 25} tokenColor={props.color} categoryColor={props.categories[2].categoryColor} name={props.categories[2].categoryName} />,
 			<Chip x={this.x+ 5} y={this.y + 25} tokenColor={props.color} categoryColor={props.categories[3].categoryColor} name={props.categories[3].categoryName} />];
-    }
+	}
+	
+	style={
+
+	}
 
 	updateChipList(category) {
 		this.listOfChips.forEach(function(element) {
@@ -66,7 +71,7 @@ export default class Token extends Component{
 			<Group key={this.color}
 			draggable
 			>
-				<Rect x={this.x} y={this.y} width={50} height={50} fill={this.color}/>
+				<Rect x={this.x} y={this.y} width={50} height={50} fill={this.color } stroke="black"/>
 				{this.listOfChips[0]}
 				{this.listOfChips[1]}
 				{this.listOfChips[2]}
