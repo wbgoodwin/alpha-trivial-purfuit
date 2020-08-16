@@ -5,6 +5,7 @@ import {
   } from '@material-ui/core'
 import { getQuestion } from '../../controllers/GameLogicController'
 import { shuffle } from '../../utils/shuffle'
+import { withGameStateContext } from '../../GameContext'
 
 const GameQuestions = (props) => {
     const [category, setCategory] = useState("")
@@ -33,9 +34,11 @@ const GameQuestions = (props) => {
     const checkAnswer = () => {
       if (question.correct_answer === usersAnswer) {
         setAnswerIsCorrect(true)
+        props.setPlayerRollAgain()
       }
       else {
         setAnswerIsCorrect(false)
+        props.nextPlayer()
       }
       setQuestionAnswered(true)
     }
@@ -174,4 +177,9 @@ const GameQuestions = (props) => {
     )
 }
 
-export default GameQuestions
+const mapContextToProps = (state) => ({
+  setPlayerRollAgain: state.actions.setPlayerRollAgain,
+  nextPlayer: state.actions.nextPlayer
+})
+
+export default withGameStateContext(GameQuestions, mapContextToProps)

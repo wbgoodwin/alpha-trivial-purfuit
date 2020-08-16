@@ -46,7 +46,8 @@ const GameLayout = (props) => {
             <Grid item style={{'marginBottom': '10px'}}>
               <PlayerList />
             </Grid>
-            {(props.gameState == 'playerRoll' || props.gameState === 'playerMove') ?
+            {(props.gameState ===  'playerRoll' || props.gameState === 'playerMove' ||
+              props.gameState === 'playerQuestion') ?
               <Grid item style={{'marginBottom': '10px'}}>
                 <Die />
               </Grid>

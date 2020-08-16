@@ -29,7 +29,9 @@ export class GameStateProvider extends React.PureComponent {
         setCategories: this.setCategories,
         setPlayers: this.setPlayers,
         setDieRoll: this.setDieRoll,
-        setPlayerMoved: this.setPlayerMoved
+        setPlayerMoved: this.setPlayerMoved,
+        setPlayerRollAgain: this.setPlayerRollAgain,
+        nextPlayer: this.nextPlayer
       }
     }
   }
@@ -62,13 +64,47 @@ export class GameStateProvider extends React.PureComponent {
   setDieRoll = (roll) => {
     this.setState({
       dieRoll: roll,
-      gameState: 'playerMove'
+      gameState: 'playerQuestion'
     })
   }
 
   setPlayerMoved = () => {
     this.setState({
       gameState: 'playerQuestion'
+    })
+  }
+
+  setPlayerRollAgain = () => {
+    this.setState({
+      gameState: 'playerRoll',
+      dieRoll: null
+    })
+  }
+
+  nextPlayer = () => {
+    const { players, currentPlayer } = this.state
+    let nextPlayer = null
+
+    if (players.length === 1) {
+      nextPlayer = players[0]
+    }
+    else {
+      for (let i = 0; i < players.length; i++) {
+        if (players[i] === currentPlayer) {
+          if (i === players.length - 1) {
+            nextPlayer = players[0]
+          }
+          else {
+            nextPlayer = players[i + 1]
+          }
+        }
+      }
+    }
+
+    this.setState({
+      currentPlayer: nextPlayer,
+      gameState: 'playerRoll',
+      dieRoll: null
     })
   }
 
