@@ -26,6 +26,7 @@ export default class GameLogicController {
 
 		this.playerList = this.shufflePlayers(this.playerList);
 		this.setCurrentPlayer(this.playerList[0])
+		this.currentPlayerIndex= 0
   }
 
 	getCategories() {
@@ -34,28 +35,49 @@ export default class GameLogicController {
 
 	setCurrentPlayer(player) {
 		this.currentPlayer = player;
+		console.log(this.currentPlayer.playerName)
   }
 
   getCurrentPlayer() {
     return this.currentPlayer;
   }
 
+  getCurrentPlayerIndex(){
+	  return this.currentPlayerIndex
+  }
+
 	getNextPlayer() {
-		if(this.currentPlayer === this.playerList[0])
-			return this.playerList[1];
+		for (let index = 0; index < this.playerList.length; index++){
+			if (this.currentPlayer === this.playerList[index]){
+				if(index < this.playerList.length - 1){
+					index = index + 1
+					return this.playerList[index]
+				}
+			}
+		}
+		return this.playerList[0]
+		// if(this.currentPlayer === this.playerList[0])
+		// 	return this.playerList[1];
 
-		if(this.currentPlayer === this.playerList[1])
-			return this.playerList[2];
+		// if(this.currentPlayer === this.playerList[1])
+		// 	return this.playerList[2];
 
-		if(this.currentPlayer === this.playerList[2])
-			return this.playerList[3];
+		// if(this.currentPlayer === this.playerList[2])
+		// 	return this.playerList[3];
 
-		return this.playerList[0];
+		// return this.playerList[0];
+	}
+
+	switchTurn() {
+		let nextPlayer = this.getNextPlayer()
+		this.setCurrentPlayer(nextPlayer)
+		this.currentPlayerIndex= this.playerList.indexOf(nextPlayer)
 	}
 
 	updateTokenLocation(x,y) {
 		this.currentPlayer.updateTokenLocation(x,y);
   }
+
 
   getAllPlayers = () => {
     return this.playerList.map(player => {

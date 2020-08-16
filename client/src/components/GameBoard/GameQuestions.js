@@ -46,8 +46,13 @@ const GameQuestions = (props) => {
       }
       else {
         setAnswerIsCorrect(false)
+        switchPlayer()
       }
       setQuestionAnswered(true)
+    }
+
+    const switchPlayer = () => {
+      props.controller.switchTurn()
     }
 
     const userInstructions = () => {

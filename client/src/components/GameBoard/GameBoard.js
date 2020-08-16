@@ -64,7 +64,7 @@ class GameBoard extends Component {
             <br/>
             <Die />
             <br/>
-            <GameQuestions categories={this.state.categories}/>
+            <GameQuestions categories={this.state.categories} controller={this.state.gameControl}/>
           </div>
           <div id="board" className="column right">
             <Stage width={1500} height={900}>
