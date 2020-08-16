@@ -5,6 +5,8 @@ class BoardSquare extends Component {
 
     constructor(props) {
         super(props)
+        this.tokensOnSqaure = 0;
+        this.width = 100;
     }
 
 
@@ -12,36 +14,58 @@ class BoardSquare extends Component {
         return this.props.squareFunction
     }
 
+    moveTokenOnClick = () => {
+        this.tokensOnSqaure++;
+        switch(this.tokensOnSqaure % 4) {
+            case 1:
+                this.props.gameController.updateTokenLocation(this.props.x, this.props.y);
+              break;
+            case 2:
+                this.props.gameController.updateTokenLocation(this.props.x + this.width/2, this.props.y);
+              break;
+            case 3:
+                this.props.gameController.updateTokenLocation(this.props.x, this.props.y + this.width/2);
+              break;
+            case 0:
+                this.props.gameController.updateTokenLocation(this.props.x + this.width/2, this.props.y + this.width/2);
+              break;
+            default:
+                this.props.gameController.updateTokenLocation(this.props.x, this.props.y);
+          }
+
+    }
+
+
     getBoardSquare = () => {
         if (this.getSquareFunction() === "center hub") {
             return (
-                <Group>
+                <Group onClick={() => this.moveTokenOnClick()}>
                     <Rect
                         x={this.props.x}
                         y={this.props.y}
-                        width={25}
-                        height={25}
+                        width={this.width/2}
+                        height={this.width/2}
                         fill={this.props.category[0] === undefined ? "white" : this.props.category[0].getColor() }
                     />
                     <Rect
                         x={this.props.x}
-                        y={this.props.y + 25}
-                        width={25}
-                        height={25}
+                        y={this.props.y + this.width/2}
+                        width={this.width/2}
+                        height={this.width/2}
                         fill={this.props.category[1] === undefined ? "white" : this.props.category[1].getColor() }
                     />
                     <Rect
-                        x={this.props.x + 25}
+                        x={this.props.x + this.width/2}
                         y={this.props.y}
-                        width={25}
-                        height={25}
+                        width={this.width/2}
+                        height={this.width/2}
                         fill={this.props.category[2] === undefined ? "white" : this.props.category[2].getColor() }
                     />
                     <Rect
-                        x={this.props.x + 25}
-                        y={this.props.y + 25}
-                        width={25}
-                        height={25}
+                        x={this.props.x + this.width/2}
+                        y={this.props.y + this.width/2}
+                        width={this.width/2}
+                        height={this.width/2}
                         fill={this.props.category[3] === undefined ? "white" : this.props.category[3].getColor() }
                     />
                 </Group>
@@ -49,12 +73,12 @@ class BoardSquare extends Component {
         }
         else if (this.getSquareFunction() === "roll again") {
             return (
-                <Group>
+                <Group onClick={() => this.moveTokenOnClick()}>
                     <Rect
                         x={this.props.x}
                         y={this.props.y}
-                        width={50}
-                        height={50}
+                        width={this.width}
+                        height={this.width}
                         fill="grey"
                         stroke="black"
                     />
@@ -64,16 +88,16 @@ class BoardSquare extends Component {
         }
         else if (this.getSquareFunction() === "headquarter") {
             return (
-                <Group>
+                <Group onClick={() => this.moveTokenOnClick()}>
                     <Rect
                         x={this.props.x}
                         y={this.props.y}
-                        width={50}
-                        height={50}
+                        width={this.width}
+                        height={this.width}
                         fill="grey"
                         stroke="black"
                     />
-                    <Circle x={this.props.x + 25} y={this.props.y + 25} radius={25} fill={this.props.category === undefined ? "grey" : this.props.category.getColor() } />
+                    <Circle x={this.props.x + this.width/2} y={this.props.y + this.width/2} radius={this.width/2} fill={this.props.category === undefined ? "grey" : this.props.category.getColor() } />
                 </Group>
             )
         }
@@ -81,10 +105,11 @@ class BoardSquare extends Component {
             return (<Rect
                 x={this.props.x}
                 y={this.props.y}
-                width={50}
-                height={50}
+                width={this.width}
+                height={this.width}
                 fill={this.props.category === undefined ? "white" : this.props.category.getColor() }
                 stroke="black"
+                onClick={() => this.moveTokenOnClick()}
             />)
         }
     }
