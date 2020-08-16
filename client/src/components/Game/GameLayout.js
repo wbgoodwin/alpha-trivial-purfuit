@@ -46,12 +46,20 @@ const GameLayout = (props) => {
             <Grid item style={{'marginBottom': '10px'}}>
               <PlayerList />
             </Grid>
-            <Grid item style={{'marginBottom': '10px'}}>
-              <Die />
-            </Grid>
-            <Grid item style={{'marginBottom': '10px'}}>
-              <GameQuestions categories={categories} />
-            </Grid>
+            {(props.gameState == 'playerRoll' || props.gameState === 'playerMove') ?
+              <Grid item style={{'marginBottom': '10px'}}>
+                <Die />
+              </Grid>
+              :
+              null
+            }
+            {
+              props.gameState === 'playerQuestion' ?
+              <Grid item style={{'marginBottom': '10px'}}>
+                <GameQuestions categories={categories} />
+              </Grid>
+              : null
+            }
           </Grid>
         </Grid>
 
@@ -67,7 +75,8 @@ const GameLayout = (props) => {
 
 const mapContextToProps = (state) => ({
   setPlayers: state.actions.setPlayers,
-  setCategories: state.actions.setCategories
+  setCategories: state.actions.setCategories,
+  gameState: state.gameState
 })
 
 export default withGameStateContext(GameLayout, mapContextToProps)

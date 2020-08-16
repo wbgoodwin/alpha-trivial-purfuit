@@ -23,9 +23,13 @@ export class GameStateProvider extends React.PureComponent {
       players: [],
       currentPlayer: null,
       gameControl: null,
+      gameState: 'setup',
+      dieRoll: null,
       actions: {
         setCategories: this.setCategories,
-        setPlayers: this.setPlayers
+        setPlayers: this.setPlayers,
+        setDieRoll: this.setDieRoll,
+        setPlayerMoved: this.setPlayerMoved
       }
     }
   }
@@ -50,7 +54,21 @@ export class GameStateProvider extends React.PureComponent {
 		playerList = shuffle(playerList)
 		this.setState({
       players: playerList,
-      currentPlayer: playerList[0]
+      currentPlayer: playerList[0],
+      gameState: 'playerRoll'
+    })
+  }
+
+  setDieRoll = (roll) => {
+    this.setState({
+      dieRoll: roll,
+      gameState: 'playerMove'
+    })
+  }
+
+  setPlayerMoved = () => {
+    this.setState({
+      gameState: 'playerQuestion'
     })
   }
 
