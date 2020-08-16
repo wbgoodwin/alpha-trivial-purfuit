@@ -33,7 +33,7 @@
             "\\.(gif|ttf|eot|svg)$": "<rootDir>/__mocks__/fileMock.js"
         },
         "setupFiles": [
-          "<rootDir>/setupTests.js"
+            "<rootDir>/setupTests.js"
         ]
     },
     "scripts": {

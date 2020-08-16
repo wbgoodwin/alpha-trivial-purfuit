@@ -9,17 +9,28 @@ export default class Chip extends Component {
         this.category = new Category(arguments);
 
         this.state = {
-            color: props.tokenColor
+            color: "darkgray",
+            // color: props.tokenColor
+            collected: false
         }
     }
 
     chipColorFlipped = () => {
-        if (this.state.color === this.props.tokenColor) {
+        let newState = !this.state.collected
+        this.setState({collected: newState})
+        if(newState){
             this.setState({color: this.props.categoryColor})
         }
-        else {
-            this.setState({color: this.props.tokenColor})
+        else
+        {
+            this.setState({color: "darkgray"})
         }
+        // if (this.state.color === this.props.tokenColor) {
+        //     this.setState({color: this.props.categoryColor})
+        // }
+        // else {
+        //     this.setState({color: this.props.tokenColor})
+        // }
     }
 
 	setAvailability() {
@@ -34,6 +45,7 @@ export default class Chip extends Component {
                         width={20}
                         height={20}
                         fill={this.state.color}
+                        stroke="lightslategray"
                     />);
     }
 

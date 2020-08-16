@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect,useState} from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -19,6 +19,12 @@ const useStyles = makeStyles({
 const PlayerList = (props) => {
 
     const classes = useStyles();
+    const [currentPlayerName, setPlayerName] = useState("")
+
+    useEffect(()=>{
+      setPlayerName(props.gameController.getCurrentPlayer().playerName)
+      console.log("useEffect is triggered" + props.gameController.currentPlayerIndex)
+    }, [props.gameController.currentPlayerIndex])
 
     return (
         <TableContainer component={Paper}>
@@ -30,7 +36,7 @@ const PlayerList = (props) => {
             </TableHead>
             <TableBody>
               {props.gameController.getAllPlayers().map((player) => {
-                  if (player.playerName === props.gameController.getCurrentPlayer().playerName) {
+                  if (player.playerName === currentPlayerName) {
                       return (
                     <TableRow key={player.playerName} style={{backgroundColor: "#90EE90"}}>
                       <TableCell component="th" scope="row">

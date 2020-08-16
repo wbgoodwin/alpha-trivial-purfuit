@@ -3,11 +3,12 @@ import React from 'react'
 import { colorMapping } from '../../colors'
 
 export default class Player {
-  constructor(categories, color, name, startPosition) {
+  constructor(categories, color, name, xPosition, yPosition) {
 		this.playerName = name;
 		this.token = <Token
-                    key={startPosition}
-                    startPosition={startPosition}
+                    key={color}
+					xPosition={xPosition}
+					yPosition={yPosition}
                     categories={categories}
                     color={colorMapping[color]}
                   />;
