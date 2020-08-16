@@ -8,10 +8,21 @@ export default class Chip extends Component {
         this.isTaken = false;
         this.category = new Category(arguments);
 
+
         this.state = {
-            color: props.tokenColor
+            color: props.tokenColor,
+            x: props.x,
+            y: props.y,
         }
     }
+
+    updateLocation = (x, y) => {
+        this.setState({
+            x: x,
+            y: y
+        });
+    }
+
 
     chipColorFlipped = () => {
         if (this.state.color === this.props.tokenColor) {
@@ -29,8 +40,8 @@ export default class Chip extends Component {
 	render() {
         return  (<Rect
                         onDblClick={() => this.chipColorFlipped()}
-                        x={this.props.x}
-                        y={this.props.y}
+                        x={this.state.x}
+                        y={this.state.y}
                         width={20}
                         height={20}
                         fill={this.state.color}
