@@ -1,12 +1,6 @@
-import React, { Component } from 'react';
-import { Stage, Layer, Group } from 'react-konva';
+import React, { Component } from 'react'
+import { Stage, Layer } from 'react-konva'
 import BoardSquare from './BoardSquare'
-import Die from '../Game/Die/Die'
-import GameQuestions from '../Game/GameQuestions'
-import GameLogicController from '../../controllers/GameLogicController'
-import './GameBoard.css'
-import { retrieveCategories } from '../../controllers/GameLogicController'
-import PlayerList from '../Game/PlayerList';
 import { withGameStateContext } from '../../GameContext'
 
 class GameBoard extends Component {
