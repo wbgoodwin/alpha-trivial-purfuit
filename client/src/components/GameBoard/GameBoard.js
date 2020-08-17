@@ -18,6 +18,11 @@ class GameBoard extends Component {
     this.updateLocation = this.updateLocation.bind(this)
   }
 
+  componentDidMount() {
+    this.props.updateBoardCenter(this.center)
+    this.forceUpdate()
+  }
+
   mapPlayers(player, index) {
     return (
       <Token
@@ -42,8 +47,8 @@ class GameBoard extends Component {
 
   render() {
     return (
-      <div id="board" className="column right">
-        <Stage width={1000} height={window.innerHeight} container="board">
+      <div id="board" style={{'paddingTop': '10px'}}>
+        <Stage width={this.width} height={900} container="board">
           <Layer>
             <BoardSquare x={this.center - (4 * this.squareSide)} y={this.topOfBoard} category={this.props.categories[0]} updateLocation={this.updateLocation}/>
             <BoardSquare x={this.center - (3 * this.squareSide)} y={this.topOfBoard} category={this.props.categories[1]} updateLocation={this.updateLocation} />
@@ -111,7 +116,8 @@ class GameBoard extends Component {
 const mapContextToProps = (state) => ({
   players: state.players,
   categories: state.categories,
-  updateTokenLocation: state.actions.updateTokenLocation
+  updateTokenLocation: state.actions.updateTokenLocation,
+  updateBoardCenter: state.actions.updateBoardCenter
 })
 
 export default withGameStateContext(GameBoard, mapContextToProps)

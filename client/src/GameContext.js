@@ -28,6 +28,7 @@ export class GameStateProvider extends React.PureComponent {
       chipOpportunity: false,
       winOpportunity: false,
       questionCategory: null,
+      boardCenter: 0,
       actions: {
         setCategories: this.setCategories,
         setPlayers: this.setPlayers,
@@ -36,7 +37,8 @@ export class GameStateProvider extends React.PureComponent {
         setPlayerRollAgain: this.setPlayerRollAgain,
         nextPlayer: this.nextPlayer,
         updateTokenLocation: this.updateTokenLocation,
-        startNewGame: this.startNewGame
+        startNewGame: this.startNewGame,
+        updateBoardCenter: this.updateBoardCenter
       }
     }
   }
@@ -181,6 +183,20 @@ export class GameStateProvider extends React.PureComponent {
       chipOpportunity: false,
       winOpportunity: false,
       questionCategory: null
+    })
+  }
+
+  updateBoardCenter = (boardCenter) => {
+    const { players } = this.state
+
+    let index = 0
+    for (let p in players) {
+      players[p].reinitializeLocation(boardCenter, index)
+      index++
+    }
+
+    this.setState({
+      boardCenter: boardCenter
     })
   }
 

@@ -10,7 +10,7 @@ class BoardSquare extends Component {
 
     this.state = {
       tokensOnSquare: 0,
-      width: 50
+      width: 100
     }
   }
 
@@ -25,17 +25,18 @@ class BoardSquare extends Component {
     let x = this.props.x
     let y = this.props.y
 
-    switch(this.numTokens % 4) {
+    switch(numTokens) {
       case 1: break
       case 2: {
         x = this.props.x + width / 2
+        console.log(x)
         break
       }
       case 3: {
         y = this.props.y + width / 2
         break
       }
-      case 0: {
+      case 4: {
         x = this.props.x + width / 2
         y = this.props.y + width / 2
         break
@@ -43,6 +44,8 @@ class BoardSquare extends Component {
       default: break
     }
 
+    console.log(numTokens)
+    console.log(x)
     this.props.updateLocation(x, y, this.getSquareFunction(), this.props.category)
     this.setState({
       tokensOnSquare: numTokens

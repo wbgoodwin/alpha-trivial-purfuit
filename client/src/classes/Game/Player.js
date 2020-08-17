@@ -2,7 +2,7 @@ export default class Player {
   constructor(categories, color, name, startPosition) {
 		this.playerName = name
     this.currentPositionX = startPosition
-    this.currentPositionY = 0
+    this.currentPositionY = 400
     this.color = color
     this.chipsEarned = {
       1: false,
@@ -27,5 +27,33 @@ export default class Player {
 
   getName() {
     return this.playerName
+  }
+
+  reinitializeLocation(boardCenter, index) {
+    const yPos = 400
+
+    switch(index) {
+      case 0: {
+        this.currentPositionX = boardCenter
+        this.currentPositionY = yPos
+        break
+      }
+      case 1: {
+        this.currentPositionX = boardCenter + 50
+        this.currentPositionY = yPos
+        break
+      }
+      case 2: {
+        this.currentPositionX = boardCenter
+        this.currentPositionY = yPos + 50
+        break
+      }
+      case 3: {
+        this.currentPositionX = boardCenter + 50
+        this.currentPositionY = yPos + 50
+        break
+      }
+      default: break
+    }
   }
 }
