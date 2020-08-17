@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import * as React from 'react'
 import {
     CardContent, CardHeader, Grid, Button, Paper, Select, MenuItem,
     InputLabel, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio
@@ -7,139 +7,156 @@ import { getQuestion } from '../../controllers/GameLogicController'
 import { shuffle } from '../../utils/shuffle'
 import { withGameStateContext } from '../../GameContext'
 
-const GameQuestions = (props) => {
-    const [category, setCategory] = useState("")
-    const [question, setQuestion] = useState(undefined)
-    const [shuffledAnswers, setShuffledAnswers] = useState([])
-    const [usersAnswer, setUsersAnswer] = useState("")
-    const [answerIsCorrect, setAnswerIsCorrect] = useState(false)
-    const [questionAnswered, setQuestionAnswered] = useState(false)
+class GameQuestions extends React.Component {
+  constructor(props) {
+    super(props)
 
-    useEffect(() => {
-      if (question) {
-        let answers = [question.correct_answer, question.incorrect_answer1,
-                       question.incorrect_answer2, question.incorrect_answer3]
-        setShuffledAnswers(shuffle(answers))
-      }
-    }, [question])
-
-    const getQuestionToShow = async (categoryName) => {
-      const category = props.categories.find(c => c.getName() === categoryName)
-      let questionAnswersSet = await getQuestion(category.getId());
-      setQuestion(questionAnswersSet);
-      setQuestionAnswered(false)
-      setUsersAnswer("")
+    this.state = {
+      category: "",
+      question: undefined,
+      shuffledAnswers: [],
+      usersAnswer: "",
+      answerIsCorrect: false,
+      questionAnswered: false
     }
 
-    const checkAnswer = () => {
-      if (question.correct_answer === usersAnswer) {
-        setAnswerIsCorrect(true)
-        props.setPlayerRollAgain()
-      }
-      else {
-        setAnswerIsCorrect(false)
-        props.nextPlayer()
-      }
-      setQuestionAnswered(true)
+    this.getQuestion = this.getQuestion.bind(this)
+    this.setCategory = this.setCategory.bind(this)
+    this.mapCategories = this.mapCategories.bind(this)
+    this.renderAnswers = this.renderAnswers.bind(this)
+    this.mapAnswers = this.mapAnswers.bind(this)
+    this.setUsersAnswer = this.setUsersAnswer.bind(this)
+    this.checkAnswer = this.checkAnswer.bind(this)
+  }
+
+  async componentDidMount() {
+    if (this.props.questionCategory !== null && this.props.questionCategory !== 0) {
+      await this.getQuestion(null)
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.questionCategory !== prevProps.questionCategory) {
+      this.getQuestion(null)
+    }
+  }
+
+  async getQuestion(category) {
+    let question = {}
+
+    if (category !== null) {
+      const id = this.props.categories.find(c => c.name === category)
+      question = await getQuestion(id)
+    }
+    else {
+      question = await getQuestion(this.props.questionCategory)
     }
 
-    const userInstructions = () => {
-      return (
-        <Grid container direction="row">
-          <Grid item style={{'marginTop': '5px'}}>
-            <strong>
-              {answerIsCorrect ?
-                "Correct. Roll Again!" :
-                "Incorrect. Next Player's Turn"
-              }
-            </strong>
-          </Grid>
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={resetState}
-            style={{
-              'marginLeft': '10px'
-            }}
-          >
-            New Question
-          </Button>
-        </Grid>
-      )
-    }
 
-    const resetState = () => {
-      setCategory("")
-      setShuffledAnswers([])
-      setQuestion(undefined)
-      setUsersAnswer("")
-      setAnswerIsCorrect(false)
-      setQuestionAnswered(false)
-    }
+    let answers = [question.correct_answer, question.incorrect_answer1,
+                   question.incorrect_answer2, question.incorrect_answer3]
+    const shuffled = shuffle(answers)
 
-    const mapCategories = (category, index) => {
-      return (
-        <MenuItem key={index} value={category.getName()}>
-          {`${category.getName()} (${category.getColorName()})`}
-        </MenuItem>
-      )
-    }
+    this.setState({
+      question: question,
+      shuffledAnswers: shuffled
+    })
+  }
 
-    const renderAnswers = () => {
-      return (
-        <Grid item style={{'marginTop': '10px'}}>
-          <FormControl component="fieldset">
-          <FormLabel component="legend">{question.question}</FormLabel>
-              <RadioGroup
-                aria-label="answers"
-                name="answers" value={usersAnswer}
-                onChange={(event) => setUsersAnswer(event.target.value)}
-              >
-                {shuffledAnswers.map(mapAnswers)}
-              </RadioGroup>
-          </FormControl>
-        </Grid>
-      )
-    }
+  setCategory(e) {
+    this.setState({
+      category: e.target.value
+    })
+  }
 
-    const mapAnswers = (answer, index) => {
-      return (
-        <FormControlLabel
-          key={index}
-          value={answer}
-          control={<Radio />}
-          label={answer}
-        />
-      )
-    }
+  mapCategories(category, index) {
+    return (
+      <MenuItem key={index} value={category.getName()}>
+        {`${category.getName()} (${category.getColorName()})`}
+      </MenuItem>
+    )
+  }
 
+  checkAnswer() {
+    if (this.state.question.correct_answer === this.state.usersAnswer) {
+      this.setState({
+        answerIsCorrect: true,
+        questionAnswered: true
+      })
+      this.props.setPlayerRollAgain()
+    }
+    else {
+      this.setState({
+        answerIsCorrect: false,
+        questionAnswered: true
+      })
+      this.props.nextPlayer()
+    }
+  }
+
+  setUsersAnswer(e) {
+    this.setState({
+      usersAnswer: e.target.value
+    })
+  }
+
+  renderAnswers() {
+    return (
+      <Grid item style={{'marginTop': '10px'}}>
+        <FormControl component="fieldset">
+        <FormLabel component="legend">{this.state.question.question}</FormLabel>
+            <RadioGroup
+              aria-label="answers"
+              name="answers"
+              value={this.state.usersAnswer}
+              onChange={this.setUsersAnswer}
+            >
+              {this.state.shuffledAnswers.map(this.mapAnswers)}
+            </RadioGroup>
+        </FormControl>
+      </Grid>
+    )
+  }
+
+  mapAnswers(answer, index) {
+    return (
+      <FormControlLabel
+        key={index}
+        value={answer}
+        control={<Radio />}
+        label={answer}
+      />
+    )
+  }
+
+  render() {
     return (
       <Grid item xs={11} style={{'marginBottom': '10px', 'maxWidth': '100%'}}>
         <Paper>
           <CardHeader title="Game Questions"/>
           <CardContent>
             <Grid direction="row" container>
-
-              {!question ?
+              {
+                this.state.question ? this.renderAnswers() :
                 <Grid item>
                   <FormControl>
                     <InputLabel htmlFor="category-select">Select Category</InputLabel>
                     <Select
                         id="category-select"
                         name="category"
-                        value={category}
+                        value={this.state.category}
                         label="Select Category"
-                        onChange={(e) => setCategory(e.target.value)}
+                        onChange={this.setCategory}
                         style={{'minWidth': '20vw'}}
                     >
-                      {props.categories.map(mapCategories)}
+                      {this.props.categories.map(this.mapCategories)}
                     </Select>
                   </FormControl>
                   <Button
-                    disabled={category === ""}
+                    disabled={this.state.category === ""}
                     color="primary"
                     variant="contained"
-                    onClick={() => getQuestionToShow(category)}
+                    onClick={() => this.getQuestionToShow(this.state.category)}
                     style={{
                       'marginLeft': '10px',
                       'marginTop': '12px'
@@ -148,23 +165,41 @@ const GameQuestions = (props) => {
                       Get New Question
                   </Button>
                 </Grid>
-                :
-                renderAnswers()
+
               }
 
-              {!question ? null :
+              {!this.state.question ? null :
                 <Grid container direction="column">
                   <Grid item>
-                    {(question && questionAnswered) ?
-                        userInstructions()
-                        :
-                        <Button
-                            disabled={usersAnswer === ""}
+                    {(this.state.question && this.state.questionAnswered) ?
+                        <Grid container direction="row">
+                          <Grid item style={{'marginTop': '5px'}}>
+                            <strong>
+                              {this.state.answerIsCorrect ?
+                                "Correct. Roll Again!" :
+                                "Incorrect. Next Player's Turn"
+                              }
+                            </strong>
+                          </Grid>
+                          {/*<Button
                             color="primary"
                             variant="contained"
-                            onClick={checkAnswer}
+                            onClick={resetState}
+                            style={{
+                              'marginLeft': '10px'
+                            }}
+                          >
+                            New Question
+                          </Button>*/}
+                        </Grid>
+                        :
+                        <Button
+                            disabled={this.state.usersAnswer === ""}
+                            color="primary"
+                            variant="contained"
+                            onClick={this.checkAnswer}
                         >
-                            Check Answer
+                          Check Answer
                         </Button>
                     }
                   </Grid>
@@ -175,11 +210,13 @@ const GameQuestions = (props) => {
         </Paper>
       </Grid>
     )
+  }
 }
 
 const mapContextToProps = (state) => ({
   setPlayerRollAgain: state.actions.setPlayerRollAgain,
-  nextPlayer: state.actions.nextPlayer
+  nextPlayer: state.actions.nextPlayer,
+  questionCategory: state.questionCategory
 })
 
 export default withGameStateContext(GameQuestions, mapContextToProps)

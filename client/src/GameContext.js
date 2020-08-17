@@ -25,13 +25,17 @@ export class GameStateProvider extends React.PureComponent {
       gameControl: null,
       gameState: 'setup',
       dieRoll: null,
+      chipOpportunity: false,
+      winOpportunity: false,
+      questionCategory: null,
       actions: {
         setCategories: this.setCategories,
         setPlayers: this.setPlayers,
         setDieRoll: this.setDieRoll,
         setPlayerMoved: this.setPlayerMoved,
         setPlayerRollAgain: this.setPlayerRollAgain,
-        nextPlayer: this.nextPlayer
+        nextPlayer: this.nextPlayer,
+        updateTokenLocation: this.updateTokenLocation
       }
     }
   }
@@ -64,7 +68,7 @@ export class GameStateProvider extends React.PureComponent {
   setDieRoll = (roll) => {
     this.setState({
       dieRoll: roll,
-      gameState: 'playerQuestion'
+      gameState: 'playerMove'
     })
   }
 
@@ -104,8 +108,40 @@ export class GameStateProvider extends React.PureComponent {
     this.setState({
       currentPlayer: nextPlayer,
       gameState: 'playerRoll',
-      dieRoll: null
+      dieRoll: null,
+      chipOpportunity: false
     })
+  }
+
+  updateTokenLocation = (x, y, squareFunction, squareCategory) => {
+		this.state.currentPlayer.updateTokenLocation(x, y)
+
+    if (squareFunction === 'roll again') {
+      this.setState({
+        gameState: 'playerRoll',
+        dieRoll: null
+      })
+    }
+    else if (squareFunction === 'center hub') {
+      this.setState({
+        questionCategory: 0,
+        winOpportunity: true,
+        gameState: 'playerQuestion'
+      })
+    }
+    else if (squareFunction === 'headquarter') {
+      this.setState({
+        chipOpportunity: true,
+        gameState: 'playerQuestion',
+        questionCategory: squareCategory.getId()
+      })
+    }
+    else {
+      this.setState({
+        gameState: 'playerQuestion',
+        questionCategory: squareCategory.getId()
+      })
+    }
   }
 
   render() {

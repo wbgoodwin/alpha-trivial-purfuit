@@ -1,38 +1,27 @@
-import Token from '../../components/GameBoard/Token'
-import React from 'react'
-import { colorMapping } from '../../colors'
-
 export default class Player {
   constructor(categories, color, name, startPosition) {
-		this.playerName = name;
-		this.tokenRef = React.createRef();
-		this.token = <Token
-					ref={this.tokenRef}
-                    key={startPosition}
-                    startPosition={startPosition}
-                    categories={categories}
-                    color={colorMapping[color]}
-				  />;
+		this.playerName = name
+    this.currentPositionX = startPosition
+    this.currentPositionY = 0
+    this.color = color
+    this.chipsEarned = {
+      1: false,
+      2: false,
+      3: false,
+      4: false
+    }
 	}
 
-	getToken() {
-		return this.token;
+	updateTokenLocation(x, y) {
+		this.currentPositionX = x
+    this.currentPositionY = y
 	}
 
-	updateTokenLocation(x,y) {
-		this.tokenRef.current.updateLocation(x,y);
-	}
+  addChip(categoryId) {
+    this.chipsEarned[categoryId] = true
+  }
 
 	isTokenFull() {
-		return this.tokenRef.current.isFull();
+		return this.chips.reduce((a, v) => a && v)
 	}
-
-	checkTokenChips(category) {
-		return this.tokenRef.current.checkTokenChips(category);
-	}
-
-	addChipToToken(category) {
-		this.tokenRef.current.updateChipList(category);
-	}
-
 }
