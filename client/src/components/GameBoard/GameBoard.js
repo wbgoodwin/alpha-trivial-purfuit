@@ -10,9 +10,9 @@ class GameBoard extends Component {
     super(props)
 
     this.width = window.innerWidth;
-    this.center = (this.width / 2) - 400
-    this.squareSide = 50;
-    this.topOfBoard = 20;
+    this.center = (this.width * 0.45) - 400
+    this.squareSide = 100;
+    this.topOfBoard = 0;
 
     this.mapPlayers = this.mapPlayers.bind(this)
     this.updateLocation = this.updateLocation.bind(this)

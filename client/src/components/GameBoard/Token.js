@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Rect, Group } from 'react-konva'
 import Chip from './Chip'
+import './GameBoard.css'
 
 const Token = (props) => {
 	const [width, ] = React.useState(50)

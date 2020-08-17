@@ -8,7 +8,8 @@ const Chip = (props) => {
       y={props.y}
       width={20}
       height={20}
-      fill={props.isTaken ? props.categoryColor : props.tokenColor}
+      fill={props.isTaken ? props.categoryColor : "darkgray"}
+      stroke="lightslategray"
     />
   )
 }
