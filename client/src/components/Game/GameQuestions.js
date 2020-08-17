@@ -20,32 +20,33 @@ class GameQuestions extends React.Component {
       questionAnswered: false
     }
 
-    this.getQuestion = this.getQuestion.bind(this)
+    this.getNewQuestion = this.getNewQuestion.bind(this)
     this.setCategory = this.setCategory.bind(this)
     this.mapCategories = this.mapCategories.bind(this)
     this.renderAnswers = this.renderAnswers.bind(this)
     this.mapAnswers = this.mapAnswers.bind(this)
     this.setUsersAnswer = this.setUsersAnswer.bind(this)
     this.checkAnswer = this.checkAnswer.bind(this)
+    this.resetState = this.resetState.bind(this)
   }
 
   async componentDidMount() {
     if (this.props.questionCategory !== null && this.props.questionCategory !== 0) {
-      await this.getQuestion(null)
+      await this.getNewQuestion()
     }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (this.props.questionCategory !== prevProps.questionCategory) {
-      this.getQuestion(null)
+      this.getNewQuestion()
     }
   }
 
-  async getQuestion(category) {
+  async getNewQuestion() {
     let question = {}
 
-    if (category !== null) {
-      const id = this.props.categories.find(c => c.name === category)
+    if (this.state.category !== "") {
+      const id = this.props.categories.find(c => c.categoryName === this.state.category).getId()
       question = await getQuestion(id)
     }
     else {
@@ -83,15 +84,19 @@ class GameQuestions extends React.Component {
         answerIsCorrect: true,
         questionAnswered: true
       })
-      this.props.setPlayerRollAgain()
+
+      setTimeout(this.props.setPlayerRollAgain, 3000)
     }
     else {
       this.setState({
         answerIsCorrect: false,
         questionAnswered: true
       })
-      this.props.nextPlayer()
+
+      setTimeout(this.props.nextPlayer, 3000)
     }
+
+    setTimeout(this.resetState, 5000)
   }
 
   setUsersAnswer(e) {
@@ -129,6 +134,17 @@ class GameQuestions extends React.Component {
     )
   }
 
+  resetState() {
+    this.setState({
+      category: "",
+      question: undefined,
+      shuffledAnswers: [],
+      usersAnswer: "",
+      answerIsCorrect: false,
+      questionAnswered: false
+    })
+  }
+
   render() {
     return (
       <Grid item xs={11} style={{'marginBottom': '10px', 'maxWidth': '100%'}}>
@@ -156,7 +172,7 @@ class GameQuestions extends React.Component {
                     disabled={this.state.category === ""}
                     color="primary"
                     variant="contained"
-                    onClick={() => this.getQuestionToShow(this.state.category)}
+                    onClick={this.getNewQuestion}
                     style={{
                       'marginLeft': '10px',
                       'marginTop': '12px'
@@ -181,16 +197,6 @@ class GameQuestions extends React.Component {
                               }
                             </strong>
                           </Grid>
-                          {/*<Button
-                            color="primary"
-                            variant="contained"
-                            onClick={resetState}
-                            style={{
-                              'marginLeft': '10px'
-                            }}
-                          >
-                            New Question
-                          </Button>*/}
                         </Grid>
                         :
                         <Button

@@ -22,6 +22,10 @@ export default class Player {
   }
 
 	isTokenFull() {
-		return this.chips.reduce((a, v) => a && v)
+		return Object.keys(this.chipsEarned).reduce((a, v) => a && this.chipsEarned[v])
 	}
+
+  getName() {
+    return this.playerName
+  }
 }

@@ -7,9 +7,9 @@ import { retrieveCategories } from '../../controllers/GameLogicController'
 import Die from './Die/Die'
 import GameQuestions from './GameQuestions'
 import GameBoard from '../GameBoard/GameBoard'
+import GameWon from './GameWon'
 
 const GameLayout = (props) => {
-  const [gameSetUp, setGameSetUp] = React.useState(false)
   const [categories, setStateCategories] = React.useState([])
 
   React.useEffect(async () => {
@@ -20,13 +20,19 @@ const GameLayout = (props) => {
 
   function handleSetupSubmit(players) {
     props.setPlayers(players, categories)
-    setGameSetUp(true)
   }
 
-  if (!gameSetUp) {
+  if (props.gameState === 'setup') {
     return (
       <Grid container style={{'marginTop': '50px'}}>
         <GameSettings handleSubmit={handleSetupSubmit} />
+      </Grid>
+    )
+  }
+  else if (props.gameState === 'playerWon') {
+    return (
+      <Grid container justify="center" style={{'marginTop': '50px'}}>
+        <GameWon />
       </Grid>
     )
   }
