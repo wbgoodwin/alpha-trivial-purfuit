@@ -13,8 +13,8 @@ const RollAgain = (props) => {
             stroke="black"
         />
         <Text
-          x={props.x + 2}
-          y={props.y + 20}
+          x={props.x + 25}
+          y={props.y + 45}
           text="Roll Again"
           fontSize={10}
         />

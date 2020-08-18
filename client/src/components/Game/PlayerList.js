@@ -30,7 +30,7 @@ const PlayerList = (props) => {
               {props.players.map((player) => {
                   if (player.playerName === props.currentPlayer.playerName) {
                       return (
-                    <TableRow key={player.playerName} style={{backgroundColor: "#90EE90"}}>
+                    <TableRow key={player.playerName} style={{backgroundColor: props.currentPlayer.color}}>
                       <TableCell component="th" scope="row">
                         {player.playerName + " (curent player)"}
                       </TableCell>
@@ -38,7 +38,7 @@ const PlayerList = (props) => {
                   }
                   else {
                     return (
-                    <TableRow key={player.playerName} >
+                    <TableRow key={player.playerName} style={{backgroundColor: "mintcream"}}>
                     <TableCell component="th" scope="row">
                       {player.playerName}
                     </TableCell>
