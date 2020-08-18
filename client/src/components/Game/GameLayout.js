@@ -9,74 +9,86 @@ import GameQuestions from './GameQuestions'
 import GameBoard from '../GameBoard/GameBoard'
 import GameWon from './GameWon'
 
-const GameLayout = (props) => {
-  const [categories, setStateCategories] = React.useState([])
+class GameLayout extends React.Component {
+  constructor(props) {
+    super(props)
 
-  React.useEffect(async () => {
+    this.state = {
+      categories: []
+    }
+
+    this.handleSetupSubmit = this.handleSetupSubmit.bind(this)
+  }
+
+  async componentDidMount() {
     const rCategories = await retrieveCategories()
-    setStateCategories(rCategories)
-    props.setCategories(rCategories)
-  }, [])
-
-  function handleSetupSubmit(players) {
-    props.setPlayers(players, categories)
+    this.setState({
+      categories: rCategories
+    })
+    this.props.setCategories(rCategories)
   }
 
-  if (props.gameState === 'setup') {
-    return (
-      <Grid container style={{'marginTop': '50px'}}>
-        <GameSettings handleSubmit={handleSetupSubmit} />
-      </Grid>
-    )
+  handleSetupSubmit(players) {
+    this.props.setPlayers(players, this.state.categories)
   }
-  else if (props.gameState === 'playerWon') {
-    return (
-      <Grid container justify="center" style={{'marginTop': '50px'}}>
-        <GameWon />
-      </Grid>
-    )
-  }
-  else {
-    return (
-      <Grid
-        container
-        justify="space-between"
-        direction="row"
-        style={{
-          'marginTop': '60px',
-          'marginLeft': '10px'
-        }}
-      >
-        <Grid item xs={4}>
-          <Grid container direction="column" justify="space-between">
-            <Grid item style={{'marginBottom': '10px'}}>
-              <PlayerList />
+
+  render() {
+    if (this.props.gameState === 'setup') {
+      return (
+        <Grid container style={{'marginTop': '50px'}}>
+          <GameSettings handleSubmit={this.handleSetupSubmit} />
+        </Grid>
+      )
+    }
+    else if (this.props.gameState === 'playerWon') {
+      return (
+        <Grid container justify="center" style={{'marginTop': '50px'}}>
+          <GameWon />
+        </Grid>
+      )
+    }
+    else {
+      return (
+        <Grid
+          container
+          justify="space-between"
+          direction="row"
+          style={{
+            'marginTop': '60px',
+            'marginLeft': '10px'
+          }}
+        >
+          <Grid item xs={4}>
+            <Grid container direction="column" justify="space-between">
+              <Grid item style={{'marginBottom': '10px'}}>
+                <PlayerList />
+              </Grid>
+              {(this.props.gameState ===  'playerRoll' || this.props.gameState === 'playerMove' ||
+                this.props.gameState === 'playerQuestion') ?
+                <Grid item style={{'marginBottom': '10px'}}>
+                  <Die />
+                </Grid>
+                :
+                null
+              }
+              {
+                this.props.gameState === 'playerQuestion' ?
+                <Grid item style={{'marginBottom': '10px'}}>
+                  <GameQuestions categories={this.state.categories} />
+                </Grid>
+                : null
+              }
             </Grid>
-            {(props.gameState ===  'playerRoll' || props.gameState === 'playerMove' ||
-              props.gameState === 'playerQuestion') ?
-              <Grid item style={{'marginBottom': '10px'}}>
-                <Die />
-              </Grid>
-              :
-              null
-            }
-            {
-              props.gameState === 'playerQuestion' ?
-              <Grid item style={{'marginBottom': '10px'}}>
-                <GameQuestions categories={categories} />
-              </Grid>
-              : null
-            }
+          </Grid>
+
+          <Grid item xs={8}>
+            <Paper style={{'marginLeft': '10px', 'maxWidth': '96%'}}>
+              <GameBoard />
+            </Paper>
           </Grid>
         </Grid>
-
-        <Grid item xs={8}>
-          <Paper style={{'marginLeft': '10px', 'maxWidth': '96%'}}>
-            <GameBoard />
-          </Paper>
-        </Grid>
-      </Grid>
-    )
+      )
+    }
   }
 }
 

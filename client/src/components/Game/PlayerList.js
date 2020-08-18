@@ -8,6 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { withGameStateContext } from '../../GameContext'
+import { colorMapping } from '../../colors'
 
 const useStyles = makeStyles({
   table: {
@@ -17,6 +18,8 @@ const useStyles = makeStyles({
 
 const PlayerList = (props) => {
     const classes = useStyles();
+    console.log(props.currentPlayer)
+    console.log(colorMapping)
 
     return (
         <TableContainer component={Paper}>
@@ -30,7 +33,7 @@ const PlayerList = (props) => {
               {props.players.map((player) => {
                   if (player.playerName === props.currentPlayer.playerName) {
                       return (
-                    <TableRow key={player.playerName} style={{backgroundColor: props.currentPlayer.color}}>
+                    <TableRow key={player.playerName} style={{backgroundColor: colorMapping[props.currentPlayer.color]}}>
                       <TableCell component="th" scope="row">
                         {player.playerName + " (curent player)"}
                       </TableCell>
