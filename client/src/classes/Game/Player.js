@@ -10,11 +10,16 @@ export default class Player {
       3: false,
       4: false
     }
+    this.graphCoordinates = {
+      x: 0,
+      y: 0
+    }
 	}
 
-	updateTokenLocation(x, y) {
+	updateTokenLocation(x, y, graphCoordinates) {
 		this.currentPositionX = x
     this.currentPositionY = y
+    this.graphCoordinates = graphCoordinates
 	}
 
   addChip(categoryId) {

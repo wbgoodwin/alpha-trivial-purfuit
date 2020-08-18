@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import { Rect } from 'react-konva';
+import { Rect, Group, Text } from 'react-konva';
 import RollAgain from './RollAgain'
 import Headquarter from './Headquarter'
 import CenterHub from './CenterHub'
+
 
 class BoardSquare extends Component {
   constructor(props) {
@@ -14,11 +15,88 @@ class BoardSquare extends Component {
     }
   }
 
+  playerCanNotMoveHere = () => {
+    let nodesFound = [];
+    return this.findPlayerDistance(this.props.node, this.props.dieRoll, nodesFound) !== this.props.dieRoll;
+  }
+
+  findPlayerDistance = (node, distance, nodesFound) => {
+
+    if (node === null || node === undefined || this.nodeHasBeenFound(node, nodesFound)) {
+      return -1;
+    }
+
+    let dist = -1;
+
+    let optimalDirection = this.optimalDirection(node.x, node.y);
+
+    if (this.playerIsOnGraphCoordinates(node.x, node.y) ||
+      ((dist = this.findPlayerDistance(node[optimalDirection[0]], distance, nodesFound)) >= 0) ||
+      ((dist = this.findPlayerDistance(node[optimalDirection[1]], distance, nodesFound)) >= 0)) {
+        return dist + 1;
+    }
+    return dist;
+  }
+
+  playerIsOnGraphCoordinates = (x, y) => {
+    return this.props.currentPlayer.graphCoordinates.x === x &&
+      this.props.currentPlayer.graphCoordinates.y === y;
+  }
+
+  nodeHasBeenFound = (node, nodesFound) => {
+    for (let i = 0; i < nodesFound.length; i++) {
+      if (nodesFound[i].x === node.x && nodesFound[i].y === node.y) {
+        return true;
+      }
+    }
+    nodesFound.push(node);
+    return false;
+  }
+
+  optimalDirection = (x, y) => {
+    x = x - this.props.currentPlayer.graphCoordinates.x;
+    y = y - this.props.currentPlayer.graphCoordinates.y;
+    let degrees = Math.atan2(y, x) * (180/Math.PI);
+    let moveDirection = [];
+
+    if (degrees <= -45 && degrees > -135) {
+      moveDirection.push("bottom");
+    }
+    else if (degrees > -45 && degrees <= 45){
+      moveDirection.push("left");
+    }
+    else if (degrees >= 45 && degrees < 135) {
+      moveDirection.push("top");
+    }
+    else {
+      moveDirection.push("right");
+    }
+
+
+    if ((degrees <= -45 && degrees > -90) || (degrees >= 45 && degrees < 90)) {
+      moveDirection.push("left");
+    }
+    else if ((degrees <= -90 && degrees > -135) || (degrees >= 90 && degrees < 135)){
+      moveDirection.push("right");
+    }
+    else if ((degrees <= 0 && degrees > -45) || (degrees <= -135 && degrees > -180)) {
+      moveDirection.push("bottom");
+    }
+    else {
+      moveDirection.push("top");
+    }
+
+    return moveDirection;
+  }
+
   getSquareFunction = () => {
     return this.props.squareFunction
   }
 
   moveTokenOnClick = () => {
+    if (this.playerCanNotMoveHere()) {
+      return;
+    }
     const { tokensOnSquare, width } = this.state
     let numTokens = tokensOnSquare + 1
 
@@ -44,9 +122,8 @@ class BoardSquare extends Component {
       default: break
     }
 
-    console.log(numTokens)
-    console.log(x)
-    this.props.updateLocation(x, y, this.getSquareFunction(), this.props.category)
+
+    this.props.updateLocation(x, y, {x: this.props.node.x, y: this.props.node.y }, this.getSquareFunction(), this.props.category)
     this.setState({
       tokensOnSquare: numTokens
     })
@@ -81,6 +158,7 @@ class BoardSquare extends Component {
         />
       )
       default: return (
+        <Group>
         <Rect
           x={this.props.x}
           y={this.props.y}
@@ -90,6 +168,13 @@ class BoardSquare extends Component {
           stroke="black"
           onClick={this.moveTokenOnClick}
         />
+        {/*<Text
+          x={this.props.x + 2}
+          y={this.props.y + 20}
+          text={this.props.node.x + ", " + this.props.node.y}
+          fontSize={10}
+        />*/}
+        </Group>
       )
     }
   }

@@ -140,9 +140,9 @@ export class GameStateProvider extends React.PureComponent {
     })
   }
 
-  updateTokenLocation = (x, y, squareFunction, squareCategory) => {
+  updateTokenLocation = (x, y, graphCoordinates, squareFunction, squareCategory) => {
     if (this.state.gameState === 'playerMove') {
-      this.state.currentPlayer.updateTokenLocation(x, y)
+      this.state.currentPlayer.updateTokenLocation(x, y, graphCoordinates)
 
       if (squareFunction === 'roll again') {
         this.setState({
