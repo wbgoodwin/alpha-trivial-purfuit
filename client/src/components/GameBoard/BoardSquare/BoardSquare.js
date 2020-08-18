@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import { Rect } from 'react-konva';
+import { Rect, Group, Text } from 'react-konva';
 import RollAgain from './RollAgain'
 import Headquarter from './Headquarter'
 import CenterHub from './CenterHub'
+
 
 class BoardSquare extends Component {
   constructor(props) {
@@ -14,11 +15,62 @@ class BoardSquare extends Component {
     }
   }
 
+  playerCanNotMoveHere = () => {
+    let nodesFound = [];
+    console.log("distance",this.findPlayerDistance(this.props.node, 0, nodesFound));
+    return this.findPlayerDistance(this.props.node, 0, nodesFound) != this.props.dieRoll;
+  }
+
+  findPlayerDistance = (node, distance, nodesFound) => {
+    console.log(distance);
+    if (distance > this.props.dieRoll) {
+      console.log("zero");
+      return 0;
+    }
+    if (this.playerIsOnGraphCoordinates(node.x, node.y)) {
+      console.log("player is on");
+      return distance;
+    }
+    else {
+      if (node.hasLeft() && this.nodeHasNotBeenFound(node.left, nodesFound)){
+        return this.findPlayerDistance(node.left, distance + 1, nodesFound);
+      }
+      if (node.hasRight() && this.nodeHasNotBeenFound(node.right, nodesFound)){
+        return this.findPlayerDistance(node.right, distance + 1, nodesFound);
+      }
+      if (node.hasTop() && this.nodeHasNotBeenFound(node.top, nodesFound)){
+        return this.findPlayerDistance(node.top, distance + 1, nodesFound);
+      }
+      if (node.hasBottom() && this.nodeHasNotBeenFound(node.bottom, nodesFound)){
+        return this.findPlayerDistance(node.bottom, distance + 1, nodesFound);
+      }
+    }
+  }
+
+  playerIsOnGraphCoordinates = (x, y) => {
+    return this.props.currentPlayer.graphCoordinates.x == x &&
+      this.props.currentPlayer.graphCoordinates.y == y;
+  }
+
+  nodeHasNotBeenFound = (node, nodesFound) => {
+    let item;
+    for (item in nodesFound) {
+      if (item.x === node.x && item.y === node.y) {
+        return false;
+      }
+    }
+    nodesFound.push(node);
+    return true;
+  }
+
   getSquareFunction = () => {
     return this.props.squareFunction
   }
 
   moveTokenOnClick = () => {
+    if (this.playerCanNotMoveHere()) {
+      return;
+    }
     const { tokensOnSquare, width } = this.state
     let numTokens = tokensOnSquare + 1
 
@@ -44,9 +96,8 @@ class BoardSquare extends Component {
       default: break
     }
 
-    console.log(numTokens)
-    console.log(x)
-    this.props.updateLocation(x, y, this.getSquareFunction(), this.props.category)
+
+    this.props.updateLocation(x, y, {x: this.props.node.x, y: this.props.node.y }, this.getSquareFunction(), this.props.category)
     this.setState({
       tokensOnSquare: numTokens
     })
@@ -81,6 +132,7 @@ class BoardSquare extends Component {
         />
       )
       default: return (
+        <Group>
         <Rect
           x={this.props.x}
           y={this.props.y}
@@ -90,6 +142,13 @@ class BoardSquare extends Component {
           stroke="black"
           onClick={this.moveTokenOnClick}
         />
+        <Text
+          x={this.props.x + 2}
+          y={this.props.y + 20}
+          text={this.props.node.x + ", " + this.props.node.y}
+          fontSize={10}
+        />
+        </Group>
       )
     }
   }
