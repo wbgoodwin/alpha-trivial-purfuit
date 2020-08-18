@@ -17,34 +17,25 @@ class BoardSquare extends Component {
 
   playerCanNotMoveHere = () => {
     let nodesFound = [];
-    console.log("distance",this.findPlayerDistance(this.props.node, 0, nodesFound));
-    return this.findPlayerDistance(this.props.node, 0, nodesFound) != this.props.dieRoll;
+    return this.findPlayerDistance(this.props.node, this.props.dieRoll, nodesFound) !== this.props.dieRoll;
   }
 
   findPlayerDistance = (node, distance, nodesFound) => {
-    console.log(distance);
-    if (distance > this.props.dieRoll) {
-      console.log("zero");
-      return 0;
+
+    if (node === null || node === undefined || this.nodeHasBeenFound(node, nodesFound)) {
+      return -1;
     }
-    if (this.playerIsOnGraphCoordinates(node.x, node.y)) {
-      console.log("player is on");
-      return distance;
+
+    let dist = -1;
+
+    let optimalDirection = this.optimalDirection(node.x, node.y);
+
+    if (this.playerIsOnGraphCoordinates(node.x, node.y) ||
+      ((dist = this.findPlayerDistance(node[optimalDirection[0]], distance, nodesFound)) >= 0) ||
+      ((dist = this.findPlayerDistance(node[optimalDirection[1]], distance, nodesFound)) >= 0)) {
+        return dist + 1;
     }
-    else {
-      if (node.hasLeft() && this.nodeHasNotBeenFound(node.left, nodesFound)){
-        return this.findPlayerDistance(node.left, distance + 1, nodesFound);
-      }
-      if (node.hasRight() && this.nodeHasNotBeenFound(node.right, nodesFound)){
-        return this.findPlayerDistance(node.right, distance + 1, nodesFound);
-      }
-      if (node.hasTop() && this.nodeHasNotBeenFound(node.top, nodesFound)){
-        return this.findPlayerDistance(node.top, distance + 1, nodesFound);
-      }
-      if (node.hasBottom() && this.nodeHasNotBeenFound(node.bottom, nodesFound)){
-        return this.findPlayerDistance(node.bottom, distance + 1, nodesFound);
-      }
-    }
+    return dist;
   }
 
   playerIsOnGraphCoordinates = (x, y) => {
@@ -52,15 +43,50 @@ class BoardSquare extends Component {
       this.props.currentPlayer.graphCoordinates.y == y;
   }
 
-  nodeHasNotBeenFound = (node, nodesFound) => {
-    let item;
-    for (item in nodesFound) {
-      if (item.x === node.x && item.y === node.y) {
-        return false;
+  nodeHasBeenFound = (node, nodesFound) => {
+    for (let i = 0; i < nodesFound.length; i++) {
+      if (nodesFound[i].x == node.x && nodesFound[i].y == node.y) {
+        return true;
       }
     }
     nodesFound.push(node);
-    return true;
+    return false;
+  }
+
+  optimalDirection = (x, y) => {
+    x = x - this.props.currentPlayer.graphCoordinates.x;
+    y = y - this.props.currentPlayer.graphCoordinates.y;
+    let degrees = Math.atan2(y, x) * (180/Math.PI);
+    let moveDirection = [];
+
+    if (degrees <= -45 && degrees > -135) {
+      moveDirection.push("bottom");
+    }
+    else if (degrees > -45 && degrees <= 45){
+      moveDirection.push("left");
+    }
+    else if (degrees >= 45 && degrees < 135) {
+      moveDirection.push("top");
+    }
+    else {
+      moveDirection.push("right");
+    }
+
+
+    if ((degrees <= -45 && degrees > -90) || (degrees >= 45 && degrees < 90)) {
+      moveDirection.push("left");
+    }
+    else if ((degrees <= -90 && degrees > -135) || (degrees >= 90 && degrees < 135)){
+      moveDirection.push("right");
+    }
+    else if ((degrees <= 0 && degrees > -45) || (degrees <= -135 && degrees > -180)) {
+      moveDirection.push("bottom");
+    }
+    else {
+      moveDirection.push("top");
+    }
+
+    return moveDirection;
   }
 
   getSquareFunction = () => {
