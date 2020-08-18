@@ -14,6 +14,7 @@ import teamLogo from "../../pages/Help/images/teamLogo.png";
 import homePage from "../../pages/Help/images/homePage.png";
 import adminPage from "../../pages/Help/images/adminPage.png";
 import helpPage from "../../pages/Help/images/helpPage.png";
+import gameBoard from "../../pages/Help/images/gameBoard.png";
 
 const Help = () => {
   const imageStyle = {
@@ -74,7 +75,7 @@ const Help = () => {
           <Accordion>
             <AccordionSummary>
               <Typography style={accordionHeader}>
-                What Does the Game Look Like?
+                How to Navigate Through the Game?
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
@@ -146,7 +147,7 @@ const Help = () => {
           <Accordion>
             <AccordionSummary>
               <Typography style={accordionHeader}>
-                What Are the Game Rules?
+                How to Play the Game?
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
@@ -178,6 +179,8 @@ const Help = () => {
                     answers the question correctly at the center hub.
                   </li>
                 </ul>
+                <p>The following picture illustrates the functional areas on the game board.</p>
+                <img alt="gameBoard" src={gameBoard}  style={{width: "80%", height: "70%"}}/>
               </Typography>
             </AccordionDetails>
           </Accordion>
@@ -233,7 +236,7 @@ const Help = () => {
                   <li>How can I play the game?</li>
                   <p>
                     This game by large is similar to the traditional board game,
-                    Trivial Pursuit. Please refer to the Game Rules section for
+                    Trivial Pursuit. Please refer to the How Can I Play section for
                     more detailed rules.
                   </p>
                   <li>What should I do if the game encountered an error?</li>
