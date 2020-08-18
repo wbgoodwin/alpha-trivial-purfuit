@@ -23,28 +23,28 @@ class BoardGraph {
                 negativeI = this.getNegative(i);
                 negativeJ = this.getNegative(j);
                 if (!this.mapHasObjectCopy(map, {x: i, y : j})) {
-                    map.set({x: i, y : j}, new BoardSqaureNode());                
+                    map.set({x: i, y : j}, new BoardSqaureNode());
                 }
                 if (!this.mapHasObjectCopy(map, {x: j, y : i})) {
-                    map.set({x: j, y : i}, new BoardSqaureNode());                
+                    map.set({x: j, y : i}, new BoardSqaureNode());
                 }
                 if (!this.mapHasObjectCopy(map, {x: negativeI, y : negativeJ})) {
-                    map.set({x: negativeI, y : negativeJ}, new BoardSqaureNode());                
+                    map.set({x: negativeI, y : negativeJ}, new BoardSqaureNode());
                 }
                 if (!this.mapHasObjectCopy(map, {x: negativeJ, y : negativeI})) {
-                    map.set({x: negativeJ, y : negativeI}, new BoardSqaureNode());                
+                    map.set({x: negativeJ, y : negativeI}, new BoardSqaureNode());
                 }
                 if (!this.mapHasObjectCopy(map, {x: negativeI, y : j})) {
-                    map.set({x: negativeI, y : j}, new BoardSqaureNode());                
+                    map.set({x: negativeI, y : j}, new BoardSqaureNode());
                 }
                 if (!this.mapHasObjectCopy(map, {x: negativeJ, y : i})) {
-                    map.set({x: negativeJ, y : i}, new BoardSqaureNode());                
+                    map.set({x: negativeJ, y : i}, new BoardSqaureNode());
                 }
                 if (!this.mapHasObjectCopy(map, {x: i, y : negativeJ})) {
-                    map.set({x: i, y : negativeJ}, new BoardSqaureNode());                
+                    map.set({x: i, y : negativeJ}, new BoardSqaureNode());
                 }
                 if (!this.mapHasObjectCopy(map, {x: j, y : negativeI})) {
-                    map.set({x: j, y : negativeI}, new BoardSqaureNode());                
+                    map.set({x: j, y : negativeI}, new BoardSqaureNode());
                 }
 
             }
@@ -63,8 +63,8 @@ class BoardGraph {
     }
 
     mapHasObjectCopy = (map, object) => {
-        for (const [key, value] of map) {
-            if (key.x == object.x && key.y == object.y) {
+        for (const [key, ] of map) {
+            if (key.x === object.x && key.y === object.y) {
                 return true;
             }
         }
@@ -73,7 +73,7 @@ class BoardGraph {
 
     findObjectInMap = (map, object) => {
         for (const [key, value] of map) {
-            if (key.x == object.x && key.y == object.y) {
+            if (key.x === object.x && key.y === object.y) {
                 return value;
             }
         }
@@ -81,10 +81,10 @@ class BoardGraph {
 
     /**
      * Needed because 0 and -0 are not the same in the map
-     * @param {*} i 
+     * @param {*} i
      */
     getNegative = (i) => {
-        if (i == 0){
+        if (i === 0){
             return 0;
         }
         return -i;

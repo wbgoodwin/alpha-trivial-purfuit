@@ -39,13 +39,13 @@ class BoardSquare extends Component {
   }
 
   playerIsOnGraphCoordinates = (x, y) => {
-    return this.props.currentPlayer.graphCoordinates.x == x &&
-      this.props.currentPlayer.graphCoordinates.y == y;
+    return this.props.currentPlayer.graphCoordinates.x === x &&
+      this.props.currentPlayer.graphCoordinates.y === y;
   }
 
   nodeHasBeenFound = (node, nodesFound) => {
     for (let i = 0; i < nodesFound.length; i++) {
-      if (nodesFound[i].x == node.x && nodesFound[i].y == node.y) {
+      if (nodesFound[i].x === node.x && nodesFound[i].y === node.y) {
         return true;
       }
     }
@@ -168,12 +168,12 @@ class BoardSquare extends Component {
           stroke="black"
           onClick={this.moveTokenOnClick}
         />
-        <Text
+        {/*<Text
           x={this.props.x + 2}
           y={this.props.y + 20}
           text={this.props.node.x + ", " + this.props.node.y}
           fontSize={10}
-        />
+        />*/}
         </Group>
       )
     }

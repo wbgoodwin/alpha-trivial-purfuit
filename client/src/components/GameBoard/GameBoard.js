@@ -50,7 +50,7 @@ class GameBoard extends Component {
 
   getAssociatedGraphNode = (x, y) => {
       for (const [key, value] of this.boardGraph.getGraph()) {
-        if (key.x == x && key.y == y) {
+        if (key.x === x && key.y === y) {
             return value;
         }
     }
