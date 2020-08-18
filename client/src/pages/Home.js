@@ -16,7 +16,9 @@ const Home = () => {
       className="home"
       style={{
         height: "100vh",
-        backgroundColor: "#3f50b5",
+        backgroundImage: "url(home_background.jpg)",
+        backgroundPosition: "center",
+        backgroundSize: "cover"
       }}
     >
       <Paper

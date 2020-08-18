@@ -1,36 +1,64 @@
-import Token from '../../components/GameBoard/Token'
-import React from 'react'
-import { colorMapping } from '../../colors'
-
 export default class Player {
   constructor(categories, color, name, startPosition) {
-		this.playerName = name;
-		this.token = <Token
-                    key={startPosition}
-                    startPosition={startPosition}
-                    categories={categories}
-                    color={colorMapping[color]}
-                  />;
+		this.playerName = name
+    this.currentPositionX = startPosition
+    this.currentPositionY = 400
+    this.color = color
+    this.chipsEarned = {
+      1: false,
+      2: false,
+      3: false,
+      4: false
+    }
+    this.graphCoordinates = {
+      x: 0,
+      y: 0
+    }
 	}
 
-	getToken() {
-		return this.token;
+	updateTokenLocation(x, y, graphCoordinates) {
+		this.currentPositionX = x
+    this.currentPositionY = y
+    this.graphCoordinates = graphCoordinates
 	}
 
-	updateTokenLocation(x,y) {
-		this.token.updateLocation(x,y);
-	}
+  addChip(categoryId) {
+    this.chipsEarned[categoryId] = true
+  }
 
 	isTokenFull() {
-		return this.token.isFull();
+		return Object.keys(this.chipsEarned).reduce((a, v) => a && this.chipsEarned[v])
 	}
 
-	checkTokenChips(category) {
-		return this.token.checkTokenChips(category);
-	}
+  getName() {
+    return this.playerName
+  }
 
-	addChipToToken(category) {
-		this.token.updateChipList(category);
-	}
+  reinitializeLocation(boardCenter, index) {
+    const yPos = 400
 
+    switch(index) {
+      case 0: {
+        this.currentPositionX = boardCenter
+        this.currentPositionY = yPos
+        break
+      }
+      case 1: {
+        this.currentPositionX = boardCenter + 50
+        this.currentPositionY = yPos
+        break
+      }
+      case 2: {
+        this.currentPositionX = boardCenter
+        this.currentPositionY = yPos + 50
+        break
+      }
+      case 3: {
+        this.currentPositionX = boardCenter + 50
+        this.currentPositionY = yPos + 50
+        break
+      }
+      default: break
+    }
+  }
 }

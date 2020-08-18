@@ -25,7 +25,7 @@ export default class Category {
 
   getColorName = () => {
     for (let c in colorMapping) {
-      if (colorMapping[c] === this.categoryColor) {
+      if (colorMapping[c] === this.categoryColor.toUpperCase()) {
         return c
       }
     }

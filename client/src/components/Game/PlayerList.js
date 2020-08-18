@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,7 +7,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-
+import { withGameStateContext } from '../../GameContext'
+import { colorMapping } from '../../colors'
 
 const useStyles = makeStyles({
   table: {
@@ -15,10 +16,10 @@ const useStyles = makeStyles({
   },
 });
 
-
 const PlayerList = (props) => {
-
     const classes = useStyles();
+    console.log(props.currentPlayer)
+    console.log(colorMapping)
 
     return (
         <TableContainer component={Paper}>
@@ -29,10 +30,10 @@ const PlayerList = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {props.gameController.getAllPlayers().map((player) => {
-                  if (player.playerName === props.gameController.getCurrentPlayer().playerName) {
+              {props.players.map((player) => {
+                  if (player.playerName === props.currentPlayer.playerName) {
                       return (
-                    <TableRow key={player.playerName} style={{backgroundColor: "#90EE90"}}>
+                    <TableRow key={player.playerName} style={{backgroundColor: colorMapping[props.currentPlayer.color]}}>
                       <TableCell component="th" scope="row">
                         {player.playerName + " (curent player)"}
                       </TableCell>
@@ -40,7 +41,7 @@ const PlayerList = (props) => {
                   }
                   else {
                     return (
-                    <TableRow key={player.playerName} >
+                    <TableRow key={player.playerName} style={{backgroundColor: "mintcream"}}>
                     <TableCell component="th" scope="row">
                       {player.playerName}
                     </TableCell>
@@ -53,4 +54,9 @@ const PlayerList = (props) => {
     );
 }
 
-export default PlayerList
+const mapContextToProps = (state) => ({
+  players: state.players,
+  currentPlayer: state.currentPlayer
+})
+
+export default withGameStateContext(PlayerList, mapContextToProps)

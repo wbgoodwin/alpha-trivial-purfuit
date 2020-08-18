@@ -1,36 +1,34 @@
 import * as React from 'react'
-import { getQuestion } from '../../controllers/GameLogicController'
-import GameBoard from '../../components/GameBoard/GameBoard'
+import GameLayout from '../../components/Game/GameLayout'
 import Nav from '../../components/Nav'
-import Breadcrumbs from '../../components/Breadcrumbs'
+import { GameStateProvider, GameStateContext } from '../../GameContext'
+import { Button } from '@material-ui/core'
+import { Link } from 'react-router-dom'
 
 class Game extends React.Component {
   constructor(props) {
     super(props)
-
-    this.state = {
-      question: {}
-    }
-  }
-
-  async componentDidMount() {
-    //const data = await getQuestion(1)
-    /* this.setState({
-      question: data
-    }) */
   }
 
   render() {
     return (
       <div>
-        <Nav/>
-        <Breadcrumbs
-        links={[
-          {to: '/', name: 'Home'}
-        ]}
-        currentPage="Game"
-      />
-        <GameBoard />
+        <Nav>
+          <Button
+            style={{'marginRight': '10px', 'height': '35px', 'marginTop': '7px'}}
+            variant="contained"
+            size="small"
+          >
+            <Link to="/" style={{'textDecoration': 'none', 'color': '#000000'}}>
+              Exit Game
+            </Link>
+          </Button>
+        </Nav>
+        <GameStateProvider {...this.props}>
+          <GameStateContext.Consumer>
+            {() => <GameLayout />}
+          </GameStateContext.Consumer>
+        </GameStateProvider>
       </div>
     )
   }
